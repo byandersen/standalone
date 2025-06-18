@@ -59,14 +59,6 @@
   justify-content: center;
 }
 
-.sidebar {
-  grid-row: 1 / 8;
-  grid-column: 6 / 9;
-  padding: 25px;
-  font-size: 24px;
-  text-align: right;
-}
-
 .interactive-joystick,
 .interactive-buttons {
   z-index: 3;
@@ -75,38 +67,52 @@
 
 .sidebar {
   grid-row: 1 / 8;
-  grid-column: 6 / 9;
+  grid-column: 7 / 9;
   padding: 25px;
   font-size: 24px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+}
+
+.sidebar p {
+  font-size: 16px;
+  text-align: right;
 }
 
 .popup-menu {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: repeat(8, 1fr);
+  grid-template-columns: auto;
+  justify-items: left;
   gap: 16px;
   margin-top: 30px;
 }
 
-.settings-btn, .images-btn,.focus-btn, .other-btn {
+.popup-menu p {
+  font-size: 24px;
+  justify-self: left;
+}
+
+.settings-btn,
+.images-btn,
+.focus-btn,
+.other-btn {
   background-color: var(--lilac);
   color: white;
   border: none;
-  padding: 10px 20px;
+  padding: 15px 20px;
   font-family: "Nunito", sans-serif;
   border-radius: 8px;
   font-size: 16px;
-  width: 150px;
-  text-align: center;
+  width: 80%;
+  text-align: left;
   cursor: pointer;
   transition: background-color 0.2s, box-shadow 0.2s;
 }
 
-.settings-btn:hover, .images-btn:hover,.focus-btn:hover, .other-btn:hover {
+.settings-btn:hover,
+.images-btn:hover,
+.focus-btn:hover,
+.other-btn:hover {
   background-color: var(--lilacHover);
   box-shadow: 0 0 10px rgba(136, 68, 219, 0.5);
 }
