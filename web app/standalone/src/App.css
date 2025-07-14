@@ -93,7 +93,7 @@
 }
 
 .settings-btn,
-.images-btn,
+.gallery-btn,
 .focus-btn,
 .other-btn {
   background-color: var(--lilac);
@@ -116,3 +116,4 @@
   background-color: var(--lilacHover);
   box-shadow: 0 0 10px rgba(136, 68, 219, 0.5);
 }
+

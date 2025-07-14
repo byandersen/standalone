@@ -1,19 +1,25 @@
 import React, { useEffect } from "react";
 import ControllerBtns from "./ControllerBtns";
+/* This component sets the attributes for each individual button.*/
 
-/* This component sets the attributes for each individual button.*/ 
+/* Buttons neubelegen, wenn z.B. smartAutofocus gewählt wurde. Auf Hauptbuttons alle Funktionen 
+setzen, Menü rausnehmen*/
 
-function ControllerBtnsInteraction({ setShowButtons }) {
+function ControllerBtnsInteraction({ setShowMenu, setShowGallery }) {
+  
   useEffect(() => {
     const handleKeyDown = (a) => {
       if (a.key === "a") {
+        /*param a: key input
+      set btn attributes when button is pressed (white, full opacity, add dropshadow)*/
         const buttonA = document.getElementById("button-a");
         if (buttonA) {
           buttonA.setAttribute("fill", "white");
           buttonA.setAttribute("fill-opacity", "1");
           buttonA.setAttribute("filter", "url(#dropshadowbtns)");
         }
-        setShowButtons(true);
+        setShowGallery((prev) => !prev);
+        setShowMenu((prev) => !prev);
       } else if (a.key === "b") {
         const buttonB = document.getElementById("button-b");
         if (buttonB) {
@@ -34,6 +40,26 @@ function ControllerBtnsInteraction({ setShowButtons }) {
           buttonC.setAttribute("fill-opacity", "1");
           buttonC.setAttribute("filter", "url(#dropshadowbtns)");
         }
+        //FOCUS STACK
+        fetch(
+          "http://10.0.1.10:5000/api/v2/extensions/org.openflexure.focus-stack/acquire_and_fuse_stack",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              settle: 0.6,
+              start_offset: -300,
+              step_size: 40,
+              blur: 21,
+              output_name: "fused.jpg",
+              weights_alpha: 25,
+              levels: 10,
+              end_offset: 300,
+            }),
+          }
+        );
       } else if (a.key === "d") {
         const buttonD = document.getElementById("button-d");
         if (buttonD) {
@@ -41,10 +67,30 @@ function ControllerBtnsInteraction({ setShowButtons }) {
           buttonD.setAttribute("fill-opacity", "1");
           buttonD.setAttribute("filter", "url(#dropshadowbtns)");
         }
+        //3 Modi, einmal 400 mit 5 steps, 800 mit 10 steps, 1200 mit 15 steps
+        fetch(
+          "http://10.0.1.10:5000/api/v2/extensions/org.openflexure.smart-autofocus/smart_autofocus",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              coarse_range: 400,
+              coarse_steps: 5,
+              fine_range: 100,
+              fine_steps: 1,
+              settle: 0.6,
+              metric_name: "variance",
+            }),
+          }
+        );
       }
     };
 
     const handleKeyUp = (a) => {
+      /*param a: key input
+      set btn attributes when button is released (white, reduced opacity, remove dropshadow)*/
       if (a.key === "a") {
         const buttonA = document.getElementById("button-a");
         if (buttonA) {
