@@ -1,0 +1,6 @@
+labthings
+markupsafe<2.1.0
+setuptools
+websockets
+pyserial
+setproctitle
