@@ -5,7 +5,7 @@ import ControllerBtns from "./ControllerBtns";
 /* Buttons neubelegen, wenn z.B. smartAutofocus gewählt wurde. Auf Hauptbuttons alle Funktionen 
 setzen, Menü rausnehmen*/
 
-function ControllerBtnsInteraction({ setShowMenu, setShowGallery }) {
+function ControllerBtnsInteraction({ setShowMenu, setShowGallery, setShowGalleryMenu }) {
   
   useEffect(() => {
     const handleKeyDown = (a) => {
@@ -18,8 +18,9 @@ function ControllerBtnsInteraction({ setShowMenu, setShowGallery }) {
           buttonA.setAttribute("fill-opacity", "1");
           buttonA.setAttribute("filter", "url(#dropshadowbtns)");
         }
-        setShowGallery((prev) => !prev);
-        setShowMenu((prev) => !prev);
+        setShowGallery((prev) => !prev); /*sets gallery visible/closes it*/
+        setShowGalleryMenu((prev) => !prev); /*sets gallery data visible/closes it*/
+        setShowMenu((prev) => !prev); /*sets sidebar menu visible/closes it*/
       } else if (a.key === "b") {
         const buttonB = document.getElementById("button-b");
         if (buttonB) {
@@ -27,6 +28,7 @@ function ControllerBtnsInteraction({ setShowMenu, setShowGallery }) {
           buttonB.setAttribute("fill-opacity", "1");
           buttonB.setAttribute("filter", "url(#dropshadowbtns)");
         }
+        /*pressing button B calls the capture method of openflexure and takes a picture*/
         fetch("http://10.0.1.10:5000/api/v2/actions/camera/capture/", {
           method: "POST",
         })
@@ -40,7 +42,7 @@ function ControllerBtnsInteraction({ setShowMenu, setShowGallery }) {
           buttonC.setAttribute("fill-opacity", "1");
           buttonC.setAttribute("filter", "url(#dropshadowbtns)");
         }
-        //FOCUS STACK
+        /*pressing button C calls and runs the focus-stack extension*/
         fetch(
           "http://10.0.1.10:5000/api/v2/extensions/org.openflexure.focus-stack/acquire_and_fuse_stack",
           {
@@ -48,6 +50,7 @@ function ControllerBtnsInteraction({ setShowMenu, setShowGallery }) {
             headers: {
               "Content-Type": "application/json",
             },
+            /*setting parameters which the extension expects*/
             body: JSON.stringify({
               settle: 0.6,
               start_offset: -300,
@@ -67,6 +70,7 @@ function ControllerBtnsInteraction({ setShowMenu, setShowGallery }) {
           buttonD.setAttribute("fill-opacity", "1");
           buttonD.setAttribute("filter", "url(#dropshadowbtns)");
         }
+        /*pressing button D calls and runs the smart-autofocus extension*/
         //3 Modi, einmal 400 mit 5 steps, 800 mit 10 steps, 1200 mit 15 steps
         fetch(
           "http://10.0.1.10:5000/api/v2/extensions/org.openflexure.smart-autofocus/smart_autofocus",
@@ -75,6 +79,7 @@ function ControllerBtnsInteraction({ setShowMenu, setShowGallery }) {
             headers: {
               "Content-Type": "application/json",
             },
+            /*setting parameters which the extension expects*/
             body: JSON.stringify({
               coarse_range: 400,
               coarse_steps: 5,

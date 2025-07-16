@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 
-/**this component loads images from the openflexure gallery and creates a map 
+/**this component loads images from the openflexure gallery and creates a map
  * which dynamically loads all available images. To access the gallery, users
- * have to press the button "A" (change this later). 
+ * have to press the button "A" (change this later).
  */
 
-function ImageGallery({ showGallery }) {
+function GalleryMenu({ showGalleryMenu }) {
   const [images, setImages] = useState([]);
 
   useEffect(() => {
@@ -16,25 +16,21 @@ function ImageGallery({ showGallery }) {
         setImages(data);
       })
       .catch((err) => {
-        console.error("Fehler beim Laden der Bilder:", err);
+        console.error("Fehler beim Laden der Bilder-Daten:", err);
       });
   }, []);
 
-  // http://10.0.1.10:5000/api/v2/captures/62e89a5c-56c7-491b-bd68-47f7a0957b66/download/2025-06-20_08-02-42_0_0_-200.jpeg?thumbnail=true
-
   return (
-    <div className="gallery-map">
-      {showGallery && (
-        <div className="container-gallery">
+    <>
+      {showGalleryMenu && (
+        <div className="gallery-menu">
+          <h1>Image Data</h1>
           {images.map((img, id) => (
-            <div key={id} className="gallery-image">
-              <img
-                src={`http://10.0.1.10:5000/api/v2/captures/${img.id}/download/${img.filename}?thumbnail=true`}
-                alt={img.filename}
-              />
-           {/*   <p>{img.time}</p>
-              <p>{img.id}</p>
-              <div className="download-image">
+            <div key={id} className="gallery-data">
+              <p>Filename: {img.filename}</p>
+              <p>Time: {img.time}</p>
+              <p>ID: {img.id}</p>
+              <div className="download-image-btn">
                 {img.filename}
                 <a
                   href={`http://10.0.1.10:5000/api/v2/captures/${img.id}/download/${img.filename}`}
@@ -43,21 +39,25 @@ function ImageGallery({ showGallery }) {
                   download
                 </a>
               </div>
-              <div className="delete-image">
+              <div className="delete-image-btn">
                 {img.filename}
                 <a
                   href={`http://10.0.1.10:5000/api/v2/captures/${img.id}`}
-                  download
+                  delete
                 >
                   delete
                 </a>
-              </div>*/}
+              </div>
             </div>
           ))}
+          <div className="gallery-menu-btn">
+            <button className="last-img-btn">prev</button>
+            <button className="next-img-btn">next</button>
+          </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
 
-export default ImageGallery;
+export default GalleryMenu;

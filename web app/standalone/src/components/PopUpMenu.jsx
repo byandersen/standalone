@@ -6,7 +6,7 @@ function PopUpMenu({ showMenu }) {
     <>
       {showMenu && (
         <div className="popup-menu">
-          <p>Menu</p>
+          <h1>Menu</h1>
           <button className="settings-btn">Settings</button>
           <button className="gallery-btn" >Gallery</button>
           <button className="focus-btn">Focus</button>
