@@ -5,58 +5,83 @@ import React, { useEffect, useState } from "react";
  * have to press the button "A" (change this later).
  */
 
-function GalleryMenu({ showGalleryMenu }) {
-  const [images, setImages] = useState([]);
+function GalleryMenu({
+  showGalleryMenu,
+  currentImage,
+  currentIndex,
+  setCurrentIndex,
+  imagesLength,
+}) {
+  /**showGalleryMenu: is the component visible? true/false
+  currentImage: contains data of currently shown image of the list 
+  currentIndex: index of the currently shown image from the image list
+  setCurrentIndex: changes index (for next/prev)
+  imagesLength: total number of images (for disabling next btn later on) */
 
-  useEffect(() => {
-    fetch("http://10.0.1.10:5000/api/v2/captures")
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("Bilder-Daten:", data);
-        setImages(data);
-      })
-      .catch((err) => {
-        console.error("Fehler beim Laden der Bilder-Daten:", err);
-      });
-  }, []);
+  if (!showGalleryMenu || !currentImage)
+    return null; /*nothing renders if the button is either not pressed or if there's no img to show*/
+
+  const handlePrev = () => {
+    /*goes 1 img back but only if it's not the beginning of the list*/
+    if (currentIndex > 0) {
+      /*checks if current index is greater than 0*/
+      setCurrentIndex(
+        currentIndex - 1
+      ); /**if yes -> current index gets reduced by 1 */
+    }
+  };
+
+  const handleNext = () => {
+    /*goes 1 img forth but only if it's not the end of the list*/
+    if (currentIndex < imagesLength - 1) {
+      /*checks if current index is at the end of the list. substracts -1 bc imagesLength is a js Array and currentIndex is not*/
+      setCurrentIndex(currentIndex + 1); /*if ok -> current index moves one up*/
+    }
+  };
 
   return (
-    <>
-      {showGalleryMenu && (
-        <div className="gallery-menu">
-          <h1>Image Data</h1>
-          {images.map((img, id) => (
-            <div key={id} className="gallery-data">
-              <p>Filename: {img.filename}</p>
-              <p>Time: {img.time}</p>
-              <p>ID: {img.id}</p>
-              <div className="download-image-btn">
-                {img.filename}
-                <a
-                  href={`http://10.0.1.10:5000/api/v2/captures/${img.id}/download/${img.filename}`}
-                  download
-                >
-                  download
-                </a>
-              </div>
-              <div className="delete-image-btn">
-                {img.filename}
-                <a
-                  href={`http://10.0.1.10:5000/api/v2/captures/${img.id}`}
-                  delete
-                >
-                  delete
-                </a>
-              </div>
-            </div>
-          ))}
-          <div className="gallery-menu-btn">
-            <button className="last-img-btn">prev</button>
-            <button className="next-img-btn">next</button>
-          </div>
+    <div className="gallery-menu">
+      <h1>Image Data</h1>
+      <div className="gallery-data">
+        <p>Filename: {currentImage.filename}</p>
+        <p>Time: {currentImage.time}</p>
+        <p>ID: {currentImage.id}</p>
+
+        {/*   <div className="download-image-btn">
+          <a
+            href={`http://10.0.1.10:5000/api/v2/captures/${currentImage.id}/download/${currentImage.filename}`}
+            download
+          >
+            Download
+          </a>
         </div>
-      )}
-    </>
+
+        <div className="delete-image-btn">
+          <a
+            href={`http://10.0.1.10:5000/api/v2/captures/${currentImage.id}`}
+          >
+            Delete
+          </a>
+        </div>*/}
+      </div>
+
+      <div className="gallery-menu-btn">
+        <button
+          className="last-img-btn"
+          onClick={handlePrev}
+          disabled={currentIndex === 0} /*disables btn if index = 0*/
+        >
+          Prev
+        </button>
+        <button
+          className="next-img-btn"
+          onClick={handleNext}
+          disabled={currentIndex === imagesLength - 1} /*disables btn if last img is shown*/
+        >
+          Next
+        </button>
+      </div>
+    </div>
   );
 }
 

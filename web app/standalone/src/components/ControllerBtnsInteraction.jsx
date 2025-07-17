@@ -6,7 +6,7 @@ import ControllerBtns from "./ControllerBtns";
 setzen, Menü rausnehmen*/
 
 function ControllerBtnsInteraction({ setShowMenu, setShowGallery, setShowGalleryMenu }) {
-  
+
   useEffect(() => {
     const handleKeyDown = (a) => {
       if (a.key === "a") {

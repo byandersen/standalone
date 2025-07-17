@@ -19,4 +19,4 @@ function ImageDisplay({ imageUrlBase, updateInterval }) {
 export default ImageDisplay;
 
 // Usage example:
-<ImageDisplay imageUrlBase="/api/latest_image" updateInterval={10000} />;
+/*<ImageDisplay imageUrlBase="/api/latest_image" updateInterval={10000} />;*/
