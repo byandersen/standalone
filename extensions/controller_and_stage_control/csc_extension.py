@@ -11,16 +11,15 @@ from .websocket_server import WebsocketServer
 
 class CSCExtension(BaseExtension):
     def __init__(self):
-        if os.environ.get("WERKZEUG_RUN_MAIN") == "true":
-            super().__init__("de.hs-flensburg.controller-and-stage-control", version="0.0.0")
+        super().__init__("de.hs-flensburg.controller-and-stage-control", version="0.0.0")
 
-            self.add_view(JoystickStangeControlView, "/joystick-stage-control")
+        self.add_view(JoystickStangeControlView, "/joystick-stage-control")
 
-            self.websocket_server = WebsocketServer()
-            self.websocket_server.run()
+        self.websocket_server = WebsocketServer()
+        self.websocket_server.run()
 
-            self.serial_listener = threading.Thread(target=serial_listener, args=(self.websocket_server,))
-            self.serial_listener.start()
+        self.serial_listener = threading.Thread(target=serial_listener, args=(self.websocket_server,))
+        self.serial_listener.start()
 
 
 class JoystickStageControlSchema(Schema):

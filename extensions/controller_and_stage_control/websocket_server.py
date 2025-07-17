@@ -23,6 +23,7 @@ class WebsocketServer:
         logger.debug(f"client connected: {websocket.remote_address}")
         try:
             async for message in websocket:
+                await self._send_to_clients(message)
                 logger.debug(f"Received message from client: {message}")
         except websockets.exceptions.ConnectionClosed:
             logger.debug(f"Client disconnected: {websocket.remote_address}")
@@ -32,8 +33,8 @@ class WebsocketServer:
 
     async def _start_websocket_server(self):
         self.asyncio_loop = asyncio.get_running_loop()
-        async with websockets.serve(self._websocket_handler, "localhost", 6789) as server:
-            logger.info("Websocket server started on ws://localhost:6789")
+        async with websockets.serve(self._websocket_handler, "0.0.0.0", 6789) as server:
+            logger.info("Websocket server started on ws://0.0.0.0:6789")
             await server.serve_forever()
 
     async def _send_to_clients(self, message):
@@ -52,9 +53,8 @@ class WebsocketServer:
         asyncio.run(self._start_websocket_server())
 
     def run(self):
-        if os.environ.get("WERKZEUG_RUN_MAIN") == "true":
-            if self.thread:
-                logger.warning("Websocket server already running")
-                return
-            self.thread = threading.Thread(target=self.run_server)
-            self.thread.start()
+        if self.thread:
+            logger.warning("Websocket server already running")
+            return
+        self.thread = threading.Thread(target=self.run_server)
+        self.thread.start()
