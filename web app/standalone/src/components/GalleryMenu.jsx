@@ -6,7 +6,9 @@ import React, { useEffect, useState } from "react";
  */
 
 function GalleryMenu({
+  setShowMenu,
   showGalleryMenu,
+  setShowGalleryMenu,
   currentImage,
   currentIndex,
   setCurrentIndex,
@@ -81,6 +83,14 @@ function GalleryMenu({
           Next
         </button>
       </div>
+       <button
+            onClick={() => {
+              setShowGalleryMenu(false);
+              setShowMenu(true);
+            }}
+          >
+            back
+          </button>
     </div>
   );
 }

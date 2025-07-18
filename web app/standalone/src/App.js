@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
 import ControllerBtnsInteraction from "./components/ControllerBtnsInteraction";
-import PopUpMenu from "./components/PopUpMenu";
+import MainMenu from "./components/MainMenu";
+import AutofocusMenu from "./components/AutofocusMenu";
 import ControllerJoystick from "./components/ControllerJoystick";
 import ImageGallery from "./components/ImageGallery";
 import Minimap from "./components/Minimap";
@@ -10,12 +11,11 @@ import ImageDisplay from "./components/Minimap";
 
 function App() {
   const [showMenu, setShowMenu] = useState(false);
+  const [showAutofocusMenu, setShowAutofocusMenu] = useState(false);
   const [showGallery, setShowGallery] = useState(false);
   const [showGalleryMenu, setShowGalleryMenu] = useState(false);
-
   const [images, setImages] = useState([]); // Alle Bilder
   const [currentIndex, setCurrentIndex] = useState(0); // Aktueller Index
-
   const currentImage = images[currentIndex] || null;
 
   return (
@@ -49,9 +49,23 @@ function App() {
         <div className="sidebar">
           <div className="microscope-name">
             <p>STANDALONE</p>
-            {/*<PopUpMenu showMenu={showMenu} />*/}
+            <MainMenu
+              showMenu={showMenu}
+              setShowMenu={setShowMenu}
+              setShowGallery={setShowGallery}
+              setShowGalleryMenu={setShowGalleryMenu}
+              showAutofocusMenu={showAutofocusMenu}
+              setShowAutofocusMenu={setShowAutofocusMenu}
+            />
+            <AutofocusMenu
+              showAutofocusMenu={showAutofocusMenu}
+              setShowAutofocusMenu={setShowAutofocusMenu}
+              setShowMenu={setShowMenu}
+            />
           </div>
           <GalleryMenu
+            setShowMenu={setShowMenu}
+            setShowGalleryMenu={setShowGalleryMenu}
             showGalleryMenu={showGalleryMenu}
             currentImage={currentImage}
             currentIndex={currentIndex}
