@@ -36,14 +36,14 @@ function ControllerBtnsInteraction({
           .then((res) => res.json())
           .then((data) => console.log("image successfully captured", data))
           .catch((err) => console.error("error", err));
-          setShowGalleryMenu(false);
-          setShowAutofocusMenu(false);
+        setShowGallery(false);
+        setShowGalleryMenu(false);
+        setShowAutofocusMenu(false);
         setTimeout(() => {
           handleButtonUp(a);
           lastButtonPressedRef.current = null;
         }, 100); //Simulates button release after 100ms and allows button to be processed again
-  
-    } else if (a.button === 2) {
+      } else if (a.button === 2) {
         /**Autofocusmenu & 3 modes */
         const buttonB = document.getElementById("button-b");
         if (buttonB) {
@@ -58,8 +58,7 @@ function ControllerBtnsInteraction({
           handleButtonUp(a);
           lastButtonPressedRef.current = null;
         }, 100);
-  
-    } else if (a.button === 3) {
+      } else if (a.button === 3) {
         const buttonC = document.getElementById("button-c");
         if (buttonC) {
           /**FocusStack */
@@ -88,14 +87,14 @@ function ControllerBtnsInteraction({
             }),
           }
         );
+        setShowGallery(false);
         setShowGalleryMenu(false);
         setShowAutofocusMenu(false);
         setTimeout(() => {
           handleButtonUp(a);
           lastButtonPressedRef.current = null;
         }, 100);
-    
-    } else if (a.button === 4) {
+      } else if (a.button === 4) {
         /**Galerie */
         const buttonD = document.getElementById("button-d");
         if (buttonD) {
@@ -103,6 +102,7 @@ function ControllerBtnsInteraction({
           buttonD.setAttribute("fill-opacity", "1");
           buttonD.setAttribute("filter", "url(#dropshadowbtns)");
         }
+        setShowAutofocusMenu(false);
         setShowGallery((prev) => !prev); /*sets gallery visible/closes it*/
         setShowGalleryMenu(
           (prev) => !prev
