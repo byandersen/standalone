@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
+import "./Gallery.css";
+import "./MainMenu.css";
+import "./AutofocusMenu.css";
 import ControllerBtnsInteraction from "./components/ControllerBtnsInteraction";
 import MainMenu from "./components/MainMenu";
 import AutofocusMenu from "./components/AutofocusMenu";
@@ -39,6 +42,7 @@ function App() {
                 setShowMenu={setShowMenu}
                 setShowGallery={setShowGallery}
                 setShowGalleryMenu={setShowGalleryMenu}
+                setShowAutofocusMenu={setShowAutofocusMenu}
               />
             </div>
             <div className="joystick">
@@ -49,18 +53,16 @@ function App() {
         <div className="sidebar">
           <div className="microscope-name">
             <p>STANDALONE</p>
-            <MainMenu
+           {/* <MainMenu
               showMenu={showMenu}
               setShowMenu={setShowMenu}
               setShowGallery={setShowGallery}
               setShowGalleryMenu={setShowGalleryMenu}
               showAutofocusMenu={showAutofocusMenu}
               setShowAutofocusMenu={setShowAutofocusMenu}
-            />
+            />*/}
             <AutofocusMenu
               showAutofocusMenu={showAutofocusMenu}
-              setShowAutofocusMenu={setShowAutofocusMenu}
-              setShowMenu={setShowMenu}
             />
           </div>
           <GalleryMenu
@@ -76,6 +78,8 @@ function App() {
             <ImageDisplay
               imageUrlBase="/api/latest_image"
               updateInterval={10000}
+              showGalleryMenu={showGalleryMenu}
+              showAutofocusMenu={showAutofocusMenu}
             />
           </div>
         </div>

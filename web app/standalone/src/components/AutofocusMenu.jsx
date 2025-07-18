@@ -1,7 +1,5 @@
 function AutofocusMenu({
   showAutofocusMenu,
-  setShowAutofocusMenu,
-  setShowMenu,
 }) {
   
   const handleMode1 = () => {
@@ -70,22 +68,15 @@ function AutofocusMenu({
     <>
       {showAutofocusMenu && (
         <div className="autofocus-menu">
-          <button className="mode-1" onClick={handleMode1}>
+          <h1>Smart-Autofocus</h1>
+          <button className="btn-mode1" onClick={handleMode1}>
             Mode 1
           </button>
-          <button className="mode-2" onClick={handleMode2}>
+          <button className="btn-mode2" onClick={handleMode2}>
             Mode 2
           </button>
-          <button className="mode-3" onClick={handleMode3}>
+          <button className="btn-mode3" onClick={handleMode3}>
             Mode 3
-          </button>
-          <button
-            onClick={() => {
-              setShowAutofocusMenu(false);
-              setShowMenu(true);
-            }}
-          >
-            back
           </button>
         </div>
       )}

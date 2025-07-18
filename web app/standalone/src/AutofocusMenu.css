@@ -1,0 +1,28 @@
+.autofocus-menu {
+  display: flex;
+  flex-direction: column; 
+  gap: 10px;  
+}           
+
+.autofocus-menu h1 {
+  font-size: 24px;
+  justify-self: left;
+}
+
+.btn-mode1, .btn-mode2, .btn-mode3 {
+background-color: var(--lilac);
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  font-family: "Inter", sans-serif;
+  border-radius: 8px;
+  font-size: 16px;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.btn-mode1:active, .btn-mode2:active, .btn-mode3:active{
+  background-color: var(--lilacHover);
+  box-shadow: 0 0 10px rgba(136, 68, 219, 0.5);
+}

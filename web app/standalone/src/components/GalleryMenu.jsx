@@ -45,26 +45,9 @@ function GalleryMenu({
     <div className="gallery-menu">
       <h1>Image Data</h1>
       <div className="gallery-data">
-        <p>Filename: {currentImage.filename}</p>
-        <p>Time: {currentImage.time}</p>
-        <p>ID: {currentImage.id}</p>
-
-        {/*   <div className="download-image-btn">
-          <a
-            href={`http://10.0.1.10:5000/api/v2/captures/${currentImage.id}/download/${currentImage.filename}`}
-            download
-          >
-            Download
-          </a>
-        </div>
-
-        <div className="delete-image-btn">
-          <a
-            href={`http://10.0.1.10:5000/api/v2/captures/${currentImage.id}`}
-          >
-            Delete
-          </a>
-        </div>*/}
+        <p><strong>Filename: </strong> {currentImage.filename}</p>
+        <p><strong>Time: </strong> {currentImage.time}</p>
+        <p><strong>ID: </strong> {currentImage.id}</p>
       </div>
 
       <div className="gallery-menu-btn">
@@ -83,14 +66,6 @@ function GalleryMenu({
           Next
         </button>
       </div>
-       <button
-            onClick={() => {
-              setShowGalleryMenu(false);
-              setShowMenu(true);
-            }}
-          >
-            back
-          </button>
     </div>
   );
 }

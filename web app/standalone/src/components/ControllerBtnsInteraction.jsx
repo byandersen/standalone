@@ -9,6 +9,7 @@ function ControllerBtnsInteraction({
   setShowMenu,
   setShowGallery,
   setShowGalleryMenu,
+  setShowAutofocusMenu,
 }) {
   const lastButtonPressedRef = useRef(null);
   useEffect(() => {
@@ -22,44 +23,46 @@ function ControllerBtnsInteraction({
 
       if (a.button === 1) {
         /**Capture */
-        /*param a: key input
-              set btn attributes when button is pressed (white, full opacity, add dropshadow)*/
         const buttonA = document.getElementById("button-a");
         if (buttonA) {
           buttonA.setAttribute("fill", "white");
           buttonA.setAttribute("fill-opacity", "1");
           buttonA.setAttribute("filter", "url(#dropshadowbtns)");
         }
-        setShowMenu(true); /*opens main menu*/
-        setTimeout(() => {
-          handleButtonUp(a);
-          lastButtonPressedRef.current = null;
-        }, 100); //Simulates button release after 100ms and allows button to be processed again
-     
-    } else if (a.button === 2) {
-        /**Autofocus */
-        const buttonB = document.getElementById("button-b");
-        if (buttonB) {
-          buttonB.setAttribute("fill", "white");
-          buttonB.setAttribute("fill-opacity", "1");
-          buttonB.setAttribute("filter", "url(#dropshadowbtns)");
-        }
-        /*pressing button B calls the capture method of openflexure and takes a picture*/
+        /*pressing button A calls the capture method of openflexure and takes a picture*/
         fetch("http://10.0.1.10:5000/api/v2/actions/camera/capture/", {
           method: "POST",
         })
           .then((res) => res.json())
           .then((data) => console.log("image successfully captured", data))
           .catch((err) => console.error("error", err));
+          setShowGalleryMenu(false);
+          setShowAutofocusMenu(false);
+        setTimeout(() => {
+          handleButtonUp(a);
+          lastButtonPressedRef.current = null;
+        }, 100); //Simulates button release after 100ms and allows button to be processed again
+  
+    } else if (a.button === 2) {
+        /**Autofocusmenu & 3 modes */
+        const buttonB = document.getElementById("button-b");
+        if (buttonB) {
+          buttonB.setAttribute("fill", "white");
+          buttonB.setAttribute("fill-opacity", "1");
+          buttonB.setAttribute("filter", "url(#dropshadowbtns)");
+        }
+        setShowAutofocusMenu((prev) => !prev);
+        setShowGallery(false);
+        setShowGalleryMenu(false);
         setTimeout(() => {
           handleButtonUp(a);
           lastButtonPressedRef.current = null;
         }, 100);
-      } else if (a.button === 3) {
+  
+    } else if (a.button === 3) {
         const buttonC = document.getElementById("button-c");
-
         if (buttonC) {
-            /**FocusStack */
+          /**FocusStack */
           buttonC.setAttribute("fill", "white");
           buttonC.setAttribute("fill-opacity", "1");
           buttonC.setAttribute("filter", "url(#dropshadowbtns)");
@@ -85,11 +88,14 @@ function ControllerBtnsInteraction({
             }),
           }
         );
+        setShowGalleryMenu(false);
+        setShowAutofocusMenu(false);
         setTimeout(() => {
           handleButtonUp(a);
           lastButtonPressedRef.current = null;
         }, 100);
-      } else if (a.button === 4) {
+    
+    } else if (a.button === 4) {
         /**Galerie */
         const buttonD = document.getElementById("button-d");
         if (buttonD) {
@@ -97,26 +103,10 @@ function ControllerBtnsInteraction({
           buttonD.setAttribute("fill-opacity", "1");
           buttonD.setAttribute("filter", "url(#dropshadowbtns)");
         }
-        /*pressing button D calls and runs the smart-autofocus extension*/
-        //3 Modi, einmal 400 mit 5 steps, 800 mit 10 steps, 1200 mit 15 steps
-       /* fetch(
-          "http://10.0.1.10:5000/api/v2/extensions/org.openflexure.smart-autofocus/smart_autofocus",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            /*setting parameters which the extension expects
-            body: JSON.stringify({
-              coarse_range: 400,
-              coarse_steps: 5,
-              fine_range: 100,
-              fine_steps: 1,
-              settle: 0.6,
-              metric_name: "variance",
-            }),
-          }
-        );*/
+        setShowGallery((prev) => !prev); /*sets gallery visible/closes it*/
+        setShowGalleryMenu(
+          (prev) => !prev
+        ); /*sets gallery data visible/closes it*/
         setTimeout(() => {
           handleButtonUp(a);
           lastButtonPressedRef.current = null;

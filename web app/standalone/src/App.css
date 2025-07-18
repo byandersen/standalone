@@ -1,3 +1,5 @@
+@import url(https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap);
+
 :root {
   --lilac: #8844db;
   --lilacHover: #975dde;
@@ -5,7 +7,11 @@
   --btns: 100%;
 }
 
-
+.body {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
 
 .container {
   border: 2px solid white;
@@ -53,9 +59,9 @@
 
 .joystick,
 .buttons {
-  width: 190px;
-  height: 230px;
-  background-color: var(--controller);
+  width: 100px;
+  height: 130px;
+  /*background-color: var(--controller);*/
   border-radius: 25px 25px 0px 0px;
   display: flex;
   align-items: center;
@@ -79,87 +85,5 @@
 .microscope-name p {
   font-size: 16px;
   text-align: right;
-}
-
-.main-menu {
-  display: grid;
-  grid-template-rows: repeat(8, 1fr);
-  grid-template-columns: auto;
-  justify-items: left;
-  gap: 16px;
-  margin-top: 30px;
-}
-
-.main-menu h1 {
-  font-size: 24px;
-  justify-self: left;
-}
-
-.settings-btn,
-.gallery-btn,
-.focus-btn,
-.other-btn {
-  background-color: var(--lilac);
-  color: white;
-  border: none;
-  padding: 15px 20px;
-  font-family: "Nunito", sans-serif;
-  border-radius: 8px;
-  font-size: 16px;
-  width: 80%;
-  text-align: left;
-  cursor: pointer;
-  transition: background-color 0.2s, box-shadow 0.2s;
-}
-
-.settings-btn:hover,
-.images-btn:hover,
-.focus-btn:hover,
-.other-btn:hover {
-  background-color: var(--lilacHover);
-  box-shadow: 0 0 10px rgba(136, 68, 219, 0.5);
-}
-
-.gallery-menu h1 {
-  font-size: 24px;
-  justify-self: left;
-}
-
-.gallery-data p {
-  font-size: 16px;
-  justify-self: left;
-}
-
-.gallery-data a {
-  font-size: 16px;
-  justify-self: left;
-  text-align: left;
-}
-
-.download-image-btn,
-.delete-image-btn {
-  background-color: var(--lilac);
-  border: none;
-  padding: 5px 10px;
-  font-family: "Nunito", sans-serif;
-  border-radius: 8px;
-  margin-top: 0.5em;
-  margin-bottom: 0.5em;
-  font-size: 16px;
-  width: 34%;
-  text-align: left;
-  cursor: pointer;
-  transition: background-color 0.2s, box-shadow 0.2s;
-}
-
-.download-image-btn a,
-.delete-image-btn a {
-  color: white;
-  text-decoration: none;
-}
-
-.download-image-btn:hover,
-.delete-image-btn:hover {
-  background-color: var(--lilacHover);
-  box-shadow: 0 0 10px rgba(136, 68, 219, 0.5);
+  margin: 0;
 }
