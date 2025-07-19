@@ -1,3 +1,5 @@
+import {API_IP} from "../config";
+
 function AutofocusMenu({
   showAutofocusMenu,
 }) {
@@ -5,7 +7,7 @@ function AutofocusMenu({
   const handleMode1 = () => {
     console.log("mode1 clicked");
     fetch(
-      "http://10.0.1.10:5000/api/v2/extensions/org.openflexure.smart-autofocus/smart_autofocus",
+      `http://${API_IP}:5000/api/v2/extensions/org.openflexure.smart-autofocus/smart_autofocus`,
       {
         method: "POST",
         headers: {
@@ -26,7 +28,7 @@ function AutofocusMenu({
   const handleMode2 = () => {
     console.log("mode2 clicked");
     fetch(
-      "http://10.0.1.10:5000/api/v2/extensions/org.openflexure.smart-autofocus/smart_autofocus",
+      `http://${API_IP}:5000/api/v2/extensions/org.openflexure.smart-autofocus/smart_autofocus`,
       {
         method: "POST",
         headers: {
@@ -47,7 +49,7 @@ function AutofocusMenu({
   const handleMode3 = () => {
     console.log("mode3 clicked");
     fetch(
-      "http://10.0.1.10:5000/api/v2/extensions/org.openflexure.smart-autofocus/smart_autofocus",
+      `http://${API_IP}:5000/api/v2/extensions/org.openflexure.smart-autofocus/smart_autofocus`,
       {
         method: "POST",
         headers: {

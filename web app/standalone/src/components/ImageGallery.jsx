@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { API_IP } from '../config';
 
 /**this component loads images from the openflexure gallery and creates a map
  * which dynamically loads all available images. To access the gallery, users
@@ -12,7 +13,7 @@ setImages: sets list of img
 currentIndex: index of currently shown img*/
 
   useEffect(() => {
-    fetch("http://10.0.1.10:5000/api/v2/captures")
+    fetch(`http://${API_IP}:5000/api/v2/captures`)
       .then((res) => res.json())
       .then((data) => {
         const sortedImages = data.sort(
@@ -34,7 +35,7 @@ currentIndex: index of currently shown img*/
         <div className="container-gallery">
           <div className="gallery-image">
             <img
-              src={`http://10.0.1.10:5000/api/v2/captures/${currentImage.id}/download/${currentImage.filename}?thumbnail=true`}
+              src={`http://${API_IP}:5000/api/v2/captures/${currentImage.id}/download/${currentImage.filename}?thumbnail=true`}
               alt={currentImage.filename}
             />
           </div>

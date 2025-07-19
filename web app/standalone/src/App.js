@@ -11,6 +11,7 @@ import ImageGallery from "./components/ImageGallery";
 import Minimap from "./components/Minimap";
 import GalleryMenu from "./components/GalleryMenu";
 import ImageDisplay from "./components/Minimap";
+import {API_IP} from "./config";
 
 function App() {
   const [showMenu, setShowMenu] = useState(false);
@@ -33,7 +34,7 @@ function App() {
             setCurrentIndex={setCurrentIndex}
           />
           <img
-            src={"http://10.0.1.10:5000/api/v2/streams/mjpeg"}
+            src={`http://${API_IP}:5000/api/v2/streams/mjpeg`}
             alt="Live-Capture of a sample"
           />
           <div className="container-controller">
@@ -76,7 +77,7 @@ function App() {
           />
           <div className="minimap">
             <ImageDisplay
-              imageUrlBase="/api/latest_image"
+              imageUrlBase={`http://${API_IP}:5000/api/v2/extensions/de.hs-flensburg.mini-map/map`}
               updateInterval={10000}
               showGalleryMenu={showGalleryMenu}
               showAutofocusMenu={showAutofocusMenu}

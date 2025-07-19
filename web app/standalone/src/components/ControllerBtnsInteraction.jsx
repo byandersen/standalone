@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import ControllerBtns from "./ControllerBtns";
+import {API_IP} from "../config";
 /* This component sets the attributes for each individual button.*/
 
 /* Buttons neubelegen, wenn z.B. smartAutofocus gewählt wurde. Auf Hauptbuttons alle Funktionen 
@@ -13,7 +14,7 @@ function ControllerBtnsInteraction({
 }) {
   const lastButtonPressedRef = useRef(null);
   useEffect(() => {
-    const serverAddress = `ws://10.0.1.10:6789`;
+    const serverAddress = `ws://${API_IP}:6789`;
     let websocket = null;
 
     const handleButtonDown = (a) => {
@@ -30,7 +31,7 @@ function ControllerBtnsInteraction({
           buttonA.setAttribute("filter", "url(#dropshadowbtns)");
         }
         /*pressing button A calls the capture method of openflexure and takes a picture*/
-        fetch("http://10.0.1.10:5000/api/v2/actions/camera/capture/", {
+        fetch(`http://${API_IP}:5000/api/v2/actions/camera/capture/`, {
           method: "POST",
         })
           .then((res) => res.json())
@@ -68,7 +69,7 @@ function ControllerBtnsInteraction({
         }
         /*pressing button C calls and runs the focus-stack extension*/
         fetch(
-          "http://10.0.1.10:5000/api/v2/extensions/org.openflexure.focus-stack/acquire_and_fuse_stack",
+          `http://${API_IP}:5000/api/v2/extensions/org.openflexure.focus-stack/acquire_and_fuse_stack`,
           {
             method: "POST",
             headers: {
