@@ -1,6 +1,5 @@
 import asyncio
 import json
-import os
 import threading
 
 import setproctitle
@@ -24,8 +23,10 @@ class WebsocketServer:
     async def _handle_input(self, message):
         parsed_message = json.loads(message)
 
-        if parsed_message['joystick']:
-            self.stage_controller.change_direction((parsed_message['joystick']['x'], parsed_message['joystick']['y']))
+        if "joystick" in parsed_message:
+            self.stage_controller.change_direction(
+                (parsed_message["joystick"]["x"], parsed_message["joystick"]["y"])
+            )
 
         await self._send_to_clients(json.dumps(parsed_message))
 
@@ -54,9 +55,11 @@ class WebsocketServer:
             await asyncio.gather(*tasks)
 
     def handle_input(self, message):
-        logger.debug('Sending to clients')
+        logger.debug("Sending to clients")
         if self.asyncio_loop:
-            asyncio.run_coroutine_threadsafe(self._handle_input(message), self.asyncio_loop)
+            asyncio.run_coroutine_threadsafe(
+                self._handle_input(message), self.asyncio_loop
+            )
 
     def run_server(self):
         logger.debug("Running websocket server thread")

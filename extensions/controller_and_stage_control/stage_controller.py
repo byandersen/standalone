@@ -4,6 +4,7 @@ from .logger import logger as base_logger
 
 logger = base_logger.getChild(__name__)
 
+
 class StageController:
     def __init__(self, microscope_object):
         self.microscope = microscope_object
@@ -18,7 +19,11 @@ class StageController:
         with self.stage.lock:
             while self.current_direction != (0, 0):
                 self.stage.board.move_rel(
-                    (-int(self.current_direction[0] * factor), int(self.current_direction[1] * factor), 0)
+                    (
+                        -int(self.current_direction[0] * factor),
+                        int(self.current_direction[1] * factor),
+                        0,
+                    )
                 )
 
     def run(self):

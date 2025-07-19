@@ -17,5 +17,5 @@ class MiniMapExtension(BaseExtension):
 class MiniMapView(View):
 
     def get(self):
-        image_path = os.path.join(STATIC_DIR, 'placeholder.png')
+        image_path = os.path.join(STATIC_DIR, "placeholder.png")
         return send_file(image_path, mimetype="image/png")

@@ -1,21 +1,22 @@
-import os
 import threading
 
 from labthings import Schema, fields
 from labthings.extensions import BaseExtension
 from labthings.views import PropertyView
 
+from .logger import logger as base_logger
 from .serial_listener import serial_listener
 from .stage_controller import StageController
 from .websocket_server import WebsocketServer
-from .logger import logger as base_logger
 
 logger = base_logger.getChild(__name__)
 
 
 class CSCExtension(BaseExtension):
     def __init__(self):
-        super().__init__("de.hs-flensburg.controller-and-stage-control", version="0.0.0")
+        super().__init__(
+            "de.hs-flensburg.controller-and-stage-control", version="0.0.0"
+        )
 
         self.add_view(JoystickStangeControlView, "/joystick-stage-control")
 
@@ -31,7 +32,9 @@ class CSCExtension(BaseExtension):
         self.websocket_server.run()
         logger.info(f"Started websocket server")
 
-        self.serial_listener = threading.Thread(target=serial_listener, args=(self.websocket_server,))
+        self.serial_listener = threading.Thread(
+            target=serial_listener, args=(self.websocket_server,)
+        )
         self.serial_listener.start()
         logger.info(f"Started serial listener")
 
