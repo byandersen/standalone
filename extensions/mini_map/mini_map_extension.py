@@ -9,10 +9,9 @@ STATIC_DIR = os.path.dirname(os.path.abspath(__file__))
 
 class MiniMapExtension(BaseExtension):
     def __init__(self):
-        if os.environ.get("WERKZEUG_RUN_MAIN") == "true":
-            super().__init__("de.hs-flensburg.mini-map", version="0.0.0")
+        super().__init__("de.hs-flensburg.mini-map", version="0.0.0")
 
-            self.add_view(MiniMapView, "/map")
+        self.add_view(MiniMapView, "/map")
 
 
 class MiniMapView(View):
