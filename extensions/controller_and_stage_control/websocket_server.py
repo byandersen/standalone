@@ -1,4 +1,5 @@
 import asyncio
+import json
 import os
 import threading
 
@@ -6,24 +7,34 @@ import setproctitle
 import websockets
 
 from .logger import logger as base_logger
+from .stage_controller import StageController
 
 logger = base_logger.getChild(__name__)
 
 
 class WebsocketServer:
-    def __init__(self):
+    def __init__(self, stage_controller: StageController):
         print(logger)
         logger.debug("Websocket Server Initialization")
         self.connected_clients = set()
         self.asyncio_loop = None
         self.thread = None
+        self.stage_controller = stage_controller
+
+    async def _handle_input(self, message):
+        parsed_message = json.loads(message)
+
+        if parsed_message['joystick']:
+            self.stage_controller.change_direction((parsed_message['joystick']['x'], parsed_message['joystick']['y']))
+
+        await self._send_to_clients(json.dumps(parsed_message))
 
     async def _websocket_handler(self, websocket):
         self.connected_clients.add(websocket)
         logger.debug(f"client connected: {websocket.remote_address}")
         try:
             async for message in websocket:
-                await self._send_to_clients(message)
+                await self._handle_input(message)
                 logger.debug(f"Received message from client: {message}")
         except websockets.exceptions.ConnectionClosed:
             logger.debug(f"Client disconnected: {websocket.remote_address}")
@@ -42,10 +53,10 @@ class WebsocketServer:
             tasks = [client.send(message) for client in self.connected_clients]
             await asyncio.gather(*tasks)
 
-    def send_to_clients(self, message):
+    def handle_input(self, message):
         logger.debug('Sending to clients')
         if self.asyncio_loop:
-            asyncio.run_coroutine_threadsafe(self._send_to_clients(message), self.asyncio_loop)
+            asyncio.run_coroutine_threadsafe(self._handle_input(message), self.asyncio_loop)
 
     def run_server(self):
         logger.debug("Running websocket server thread")
