@@ -1,49 +1,10 @@
-/*This component creates the SVG for the Joystick-Controller. The SVGs have been creating
-using an online Tool from the Website: https://editsvgcode.com/*/
-
 function ControllerJoystick() {
   return (
-    
-      <div className="interactive-joystick">
-        <svg
-          width="83"
-          height="66"
-          viewBox="0 0 83 66"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M82.7488 23.7527C82.7488 32.0777 64.4174 38.8265 41.8044 38.8265C19.1915 38.8265 0.860107 32.0777 0.860107 23.7527C0.860107 15.4277 19.1915 0 41.8044 0C64.4174 0 82.7488 15.4277 82.7488 23.7527Z"
-            fill="white"
-            fillOpacity="0.6"
-          />
-          <ellipse
-            cx="41.4516"
-            cy="48.0037"
-            rx="18.0014"
-            ry="5.6475"
-            fill="white"
-            fillOpacity="0.6"
-          />
-          <rect
-            x="34.7454"
-            y="31.7671"
-            width="14.1187"
-            height="13.4128"
-            fill="white"
-            fillOpacity="0.6"
-          />
-          <rect
-            x="12.1553"
-            y="48.0037"
-            width="58.5928"
-            height="17.6484"
-            rx="5"
-            fill="white"
-            fillOpacity="0.6"
-          />
-        </svg>
+    <div id="interactive-joystick">
+      <div id="joystick-base">
+        <div id="joystick-handle"></div>
       </div>
+    </div>
   );
 }
 

@@ -1,20 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./App.css";
 import "./Gallery.css";
-import "./MainMenu.css";
 import "./AutofocusMenu.css";
-import ControllerBtnsInteraction from "./components/ControllerBtnsInteraction";
-import MainMenu from "./components/MainMenu";
-import AutofocusMenu from "./components/AutofocusMenu";
+import "./BtnsSidebarMap.css";
 import ControllerJoystick from "./components/ControllerJoystick";
+import ControllerJoystickInteraction from "./components/ControllerJoystickInteraction";
+import BtnsSidebarMap from "./components/BtnsSidebarMap";
+import ControllerBtnsInteraction from "./components/ControllerBtnsInteraction";
+import AutofocusMenu from "./components/AutofocusMenu";
 import ImageGallery from "./components/ImageGallery";
-import Minimap from "./components/Minimap";
 import GalleryMenu from "./components/GalleryMenu";
 import ImageDisplay from "./components/Minimap";
-import {API_IP} from "./config";
+import { API_IP } from "./config";
 
 function App() {
-  const [showMenu, setShowMenu] = useState(false);
   const [showAutofocusMenu, setShowAutofocusMenu] = useState(false);
   const [showGallery, setShowGallery] = useState(false);
   const [showGalleryMenu, setShowGalleryMenu] = useState(false);
@@ -40,7 +39,6 @@ function App() {
           <div className="container-controller">
             <div className="buttons">
               <ControllerBtnsInteraction
-                setShowMenu={setShowMenu}
                 setShowGallery={setShowGallery}
                 setShowGalleryMenu={setShowGalleryMenu}
                 setShowAutofocusMenu={setShowAutofocusMenu}
@@ -48,26 +46,16 @@ function App() {
             </div>
             <div className="joystick">
               <ControllerJoystick />
+              {/*<ControllerJoystickInteraction />*/}
             </div>
           </div>
         </div>
         <div className="sidebar">
           <div className="microscope-name">
             <p>STANDALONE</p>
-           {/* <MainMenu
-              showMenu={showMenu}
-              setShowMenu={setShowMenu}
-              setShowGallery={setShowGallery}
-              setShowGalleryMenu={setShowGalleryMenu}
-              showAutofocusMenu={showAutofocusMenu}
-              setShowAutofocusMenu={setShowAutofocusMenu}
-            />*/}
-            <AutofocusMenu
-              showAutofocusMenu={showAutofocusMenu}
-            />
           </div>
+          <AutofocusMenu showAutofocusMenu={showAutofocusMenu} />
           <GalleryMenu
-            setShowMenu={setShowMenu}
             setShowGalleryMenu={setShowGalleryMenu}
             showGalleryMenu={showGalleryMenu}
             currentImage={currentImage}
@@ -79,6 +67,12 @@ function App() {
             <ImageDisplay
               imageUrlBase={`http://${API_IP}:5000/api/v2/extensions/de.hs-flensburg.mini-map/map`}
               updateInterval={10000}
+              showGalleryMenu={showGalleryMenu}
+              showAutofocusMenu={showAutofocusMenu}
+            />
+          </div>
+          <div className="btns-sidebar-map">
+            <BtnsSidebarMap
               showGalleryMenu={showGalleryMenu}
               showAutofocusMenu={showAutofocusMenu}
             />

@@ -1,13 +1,15 @@
 import React, { useEffect, useRef } from "react";
 import ControllerBtns from "./ControllerBtns";
-import {API_IP} from "../config";
+import { API_IP } from "../config";
 /* This component sets the attributes for each individual button.*/
 
 /* Buttons neubelegen, wenn z.B. smartAutofocus gewählt wurde. Auf Hauptbuttons alle Funktionen 
 setzen, Menü rausnehmen*/
 
+/**Komponente mit 3 oder 4 Modi für Buttons mit Beschriftung
+ *  Standard (Home), Autofocus, FocusStack */
+
 function ControllerBtnsInteraction({
-  setShowMenu,
   setShowGallery,
   setShowGalleryMenu,
   setShowAutofocusMenu,
@@ -44,7 +46,7 @@ function ControllerBtnsInteraction({
           handleButtonUp(a);
           lastButtonPressedRef.current = null;
         }, 100); //Simulates button release after 100ms and allows button to be processed again
-      } else if (a.button === 2) {
+      } else if (a.button === 3) {
         /**Autofocusmenu & 3 modes */
         const buttonB = document.getElementById("button-b");
         if (buttonB) {
@@ -59,7 +61,7 @@ function ControllerBtnsInteraction({
           handleButtonUp(a);
           lastButtonPressedRef.current = null;
         }, 100);
-      } else if (a.button === 3) {
+      } else if (a.button === 4) {
         const buttonC = document.getElementById("button-c");
         if (buttonC) {
           /**FocusStack */
@@ -95,7 +97,7 @@ function ControllerBtnsInteraction({
           handleButtonUp(a);
           lastButtonPressedRef.current = null;
         }, 100);
-      } else if (a.button === 4) {
+      } else if (a.button === 2) {
         /**Galerie */
         const buttonD = document.getElementById("button-d");
         if (buttonD) {
@@ -125,21 +127,21 @@ function ControllerBtnsInteraction({
           buttonA.setAttribute("fill-opacity", "0.6");
           buttonA.removeAttribute("filter");
         }
-      } else if (a.button === 2) {
+      } else if (a.button === 3) {
         const buttonB = document.getElementById("button-b");
         if (buttonB) {
           buttonB.setAttribute("fill", "white");
           buttonB.setAttribute("fill-opacity", "0.6");
           buttonB.removeAttribute("filter");
         }
-      } else if (a.button === 3) {
+      } else if (a.button === 4) {
         const buttonC = document.getElementById("button-c");
         if (buttonC) {
           buttonC.setAttribute("fill", "white");
           buttonC.setAttribute("fill-opacity", "0.6");
           buttonC.removeAttribute("filter");
         }
-      } else if (a.button === 4) {
+      } else if (a.button === 2) {
         const buttonD = document.getElementById("button-d");
         if (buttonD) {
           buttonD.setAttribute("fill", "white");
@@ -174,7 +176,7 @@ function ControllerBtnsInteraction({
     connectWebsocket();
 
     return () => websocket && websocket.close();
-  }, [setShowGallery, setShowGalleryMenu, setShowMenu]);
+  }, [setShowGallery, setShowGalleryMenu, setShowAutofocusMenu]);
 
   return <ControllerBtns />;
 }

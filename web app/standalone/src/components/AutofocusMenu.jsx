@@ -71,7 +71,7 @@ function AutofocusMenu({
       {showAutofocusMenu && (
         <div className="autofocus-menu">
           <h1>Smart-Autofocus</h1>
-          <button className="btn-mode1" onClick={handleMode1}>
+        {/*}  <button className="btn-mode1" onClick={handleMode1}>
             Mode 1
           </button>
           <button className="btn-mode2" onClick={handleMode2}>
@@ -79,7 +79,7 @@ function AutofocusMenu({
           </button>
           <button className="btn-mode3" onClick={handleMode3}>
             Mode 3
-          </button>
+          </button>*/}
         </div>
       )}
     </>

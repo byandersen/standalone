@@ -1,14 +1,10 @@
-import React, { useEffect, useState } from "react";
-
 /**this component loads images from the openflexure gallery and creates a map
  * which dynamically loads all available images. To access the gallery, users
  * have to press the button "A" (change this later).
  */
 
 function GalleryMenu({
-  setShowMenu,
   showGalleryMenu,
-  setShowGalleryMenu,
   currentImage,
   currentIndex,
   setCurrentIndex,
@@ -45,8 +41,7 @@ function GalleryMenu({
     <div className="gallery-menu">
       <h1>Image Data</h1>
       <div className="gallery-data">
-        <p><strong>Filename: </strong> {currentImage.filename}</p>
-        <p><strong>Time: </strong> {currentImage.time}</p>
+        <p><strong>Filename: </strong> {currentImage.time}</p> 
         <p><strong>ID: </strong> {currentImage.id}</p>
       </div>
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { API_IP } from '../config';
 
 /**this component loads images from the openflexure gallery and creates a map
@@ -7,7 +7,7 @@ import { API_IP } from '../config';
  */
 
 function ImageGallery({ showGallery, images, setImages, currentIndex }) {
-  /* showGallery: gallery only gets shown if btn is triggered
+/* showGallery: gallery only gets shown if btn is triggered
 images: list of all img of the server
 setImages: sets list of img
 currentIndex: index of currently shown img*/
@@ -35,8 +35,8 @@ currentIndex: index of currently shown img*/
         <div className="container-gallery">
           <div className="gallery-image">
             <img
-              src={`http://${API_IP}:5000/api/v2/captures/${currentImage.id}/download/${currentImage.filename}?thumbnail=true`}
-              alt={currentImage.filename}
+              src={`http://${API_IP}:5000/api/v2/captures/${currentImage.id}/download/${currentImage.filename}`}
+              alt={currentImage.id}
             />
           </div>
         </div>
