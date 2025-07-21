@@ -29,13 +29,13 @@ function BtnsSidebarMap({ showGalleryMenu, showAutofocusMenu }) {
             <strong>A</strong> – 
           </div>
           <div>
-            <strong>B</strong> – prev
+            <strong>B</strong> – Nächstes
           </div>
           <div>
-            <strong>C</strong> – next
+            <strong>C</strong> – Zurück
           </div>
           <div>
-            <strong>D</strong> – Close menu
+            <strong>D</strong> – Vorheriges
           </div>
         </>
       );
@@ -47,16 +47,16 @@ function BtnsSidebarMap({ showGalleryMenu, showAutofocusMenu }) {
          return (
         <>
           <div>
-            <strong>A</strong> – Mode 1
+            <strong>A</strong> – Voll
           </div>
           <div>
-            <strong>B</strong> – Mode 2
+            <strong>B</strong> – Zurück
           </div>
           <div>
-            <strong>C</strong> – Mode 3
+            <strong>C</strong> – Fine
           </div>
           <div>
-            <strong>D</strong> – Close menu
+            <strong>D</strong> – Medium
           </div>
         </>
       );

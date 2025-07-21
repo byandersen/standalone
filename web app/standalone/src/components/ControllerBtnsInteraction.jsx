@@ -1,179 +1,375 @@
-import React, { useEffect, useRef } from "react";
+import React, {useEffect, useRef, useCallback, useState} from "react";
 import ControllerBtns from "./ControllerBtns";
-import { API_IP } from "../config";
-/* This component sets the attributes for each individual button.*/
+import {API_IP} from "../config";
+
+// ===================================================================
+// Toast Component and Styles (self-contained)
+// ===================================================================
+
+const toastStyles = {
+    // Base container style
+    container: {
+        position: 'fixed',
+        top: '20px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        padding: '12px 20px',
+        borderRadius: '8px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '10px',
+        color: 'white',
+        fontSize: '16px',
+        fontFamily: 'sans-serif',
+        zIndex: 9999,
+        transition: 'opacity 0.3s, top 0.3s', // Basic transition for appearance
+    },
+    // Style for success toasts (green)
+    success: {
+        backgroundColor: '#28a745',
+    },
+    // Style for info toasts (blue)
+    info: {
+        backgroundColor: '#17a2b8',
+    },
+    // Style for error toasts (red)
+    error: {
+        backgroundColor: '#dc3545',
+    }
+};
+
+const CheckIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+    </svg>
+);
+
+const InfoIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="16" x2="12" y2="12"></line>
+        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+    </svg>
+);
+
+// The Toast component, now defined locally
+const Toast = ({message, type}) => {
+    // Merge the base style with the type-specific style (e.g., success, info)
+    const combinedStyle = {...toastStyles.container, ...toastStyles[type]};
+
+    return (
+        <div style={combinedStyle}>
+            {type === 'success' ? <CheckIcon/> : <InfoIcon/>}
+            <span>{message}</span>
+        </div>
+    );
+};
+
+
+/* A custom hook to prevent stale closures. */
+const useLatest = (value) => {
+    const ref = useRef(value);
+    useEffect(() => {
+        ref.current = value;
+    }, [value]);
+    return ref;
+};
+
+// ===================================================================
+// Main component with integrated Toast logic
+// ===================================================================
 
 function ControllerBtnsInteraction({
-  setShowGallery,
-  setShowGalleryMenu,
-  setShowAutofocusMenu,
-}) {
+                                       setShowGallery,
+                                       setShowGalleryMenu,
+                                       setShowAutofocusMenu,
+                                       currentIndex,
+                                       setCurrentIndex,
+                                       imagesLength
+                                   }) {
 
-  const lastButtonPressedRef = useRef(null);
-  useEffect(() => {
-    const serverAddress = `ws://${API_IP}:6789`;
-    let websocket = null;
+    const websocketRef = useRef(null);
+    const lastButtonPressedRef = useRef(null);
+    const currentMenu = useRef("main");
 
-    const handleButtonDown = (a) => {
-      console.log("Button: ", a.button);
-      if (lastButtonPressedRef.current === a.button) return; //checks current value, if 1 it does nothing and prevents repeating process
-      lastButtonPressedRef.current = a.button; //Marks this button as currently "pressed" to block re-processing until released
+    // State for the toast
+    const [toastInfo, setToastInfo] = useState({show: false, message: '', type: 'success'});
+    const toastTimerRef = useRef(null);
 
-      if (a.button === 1) {
-        /**Capture */
-        const buttonA = document.getElementById("button-a");
-        if (buttonA) {
-          buttonA.setAttribute("fill", "white");
-          buttonA.setAttribute("fill-opacity", "1");
-          buttonA.setAttribute("filter", "url(#dropshadowbtns)");
+    // Helper function to show the toast
+    const showToast = useCallback((message, type = 'success') => {
+        if (toastTimerRef.current) {
+            clearTimeout(toastTimerRef.current);
         }
-        /*pressing button A calls the capture method of openflexure and takes a picture*/
-        fetch(`http://${API_IP}:5000/api/v2/actions/camera/capture/`, {
-          method: "POST",
-        })
-          .then((res) => res.json())
-          .then((data) => console.log("image successfully captured", data))
-          .catch((err) => console.error("error", err));
-        setShowGallery(false);
-        setShowGalleryMenu(false);
-        setShowAutofocusMenu(false);
-        setTimeout(() => {
-          handleButtonUp(a);
-          lastButtonPressedRef.current = null;
-        }, 100); //Simulates button release after 100ms and allows button to be processed again
-      } else if (a.button === 3) {
-        /**Autofocusmenu & 3 modes */
-        const buttonB = document.getElementById("button-b");
-        if (buttonB) {
-          buttonB.setAttribute("fill", "white");
-          buttonB.setAttribute("fill-opacity", "1");
-          buttonB.setAttribute("filter", "url(#dropshadowbtns)");
-        }
-        setShowAutofocusMenu((prev) => !prev);
-        setShowGallery(false);
-        setShowGalleryMenu(false);
-        setTimeout(() => {
-          handleButtonUp(a);
-          lastButtonPressedRef.current = null;
-        }, 100);
-      } else if (a.button === 4) {
-        const buttonC = document.getElementById("button-c");
-        if (buttonC) {
-          /**FocusStack */
-          buttonC.setAttribute("fill", "white");
-          buttonC.setAttribute("fill-opacity", "1");
-          buttonC.setAttribute("filter", "url(#dropshadowbtns)");
-        }
-        /*pressing button C calls and runs the focus-stack extension*/
+        setToastInfo({show: true, message, type});
+        toastTimerRef.current = setTimeout(() => {
+            setToastInfo({show: false, message: '', type: 'success'});
+        }, 3000); // Hide after 3 seconds
+    }, []);
+
+    const autoFocus1 = () => {
+        console.log("mode1 clicked");
         fetch(
-          `http://${API_IP}:5000/api/v2/extensions/org.openflexure.focus-stack/acquire_and_fuse_stack`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            /*setting parameters which the extension expects*/
-            body: JSON.stringify({
-              settle: 0.6,
-              start_offset: -300,
-              step_size: 40,
-              blur: 21,
-              output_name: "fused.jpg",
-              weights_alpha: 25,
-              levels: 10,
-              end_offset: 300,
-            }),
-          }
+            `http://${API_IP}:5000/api/v2/extensions/org.openflexure.smart-autofocus/smart_autofocus`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    coarse_range: 400,
+                    coarse_steps: 5,
+                    fine_range: 100,
+                    fine_steps: 1,
+                    settle: 0.6,
+                    metric_name: "variance",
+                }),
+            }
         );
+    };
+
+    const autoFocus2 = () => {
+        console.log("mode2 clicked");
+        fetch(
+            `http://${API_IP}:5000/api/v2/extensions/org.openflexure.smart-autofocus/smart_autofocus`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    coarse_range: 800,
+                    coarse_steps: 10,
+                    fine_range: 100,
+                    fine_steps: 1,
+                    settle: 0.6,
+                    metric_name: "variance",
+                }),
+            }
+        );
+    };
+
+    const autoFocus3 = () => {
+        console.log("mode3 clicked");
+        fetch(
+            `http://${API_IP}:5000/api/v2/extensions/org.openflexure.smart-autofocus/smart_autofocus`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    coarse_range: 1200,
+                    coarse_steps: 15,
+                    fine_range: 100,
+                    fine_steps: 1,
+                    settle: 0.6,
+                    metric_name: "variance",
+                }),
+            }
+        );
+    };
+
+    const captureImage = useCallback(() => {
+        fetch(`http://${API_IP}:5000/api/v2/actions/camera/capture/`, {
+            method: "POST",
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                console.log("image successfully captured", data);
+                showToast('Bild gespeichert!', 'success');
+            })
+            .catch((err) => {
+                console.error("error", err)
+                showToast('Speichern fehlgeschlagen!', 'error');
+            });
         setShowGallery(false);
         setShowGalleryMenu(false);
         setShowAutofocusMenu(false);
+    }, [API_IP, setShowAutofocusMenu, setShowGallery, setShowGalleryMenu, showToast]);
+
+    const focusStack = useCallback(() => {
+        showToast('Starte Focus Stacking', 'success');
+        fetch(
+            `http://${API_IP}:5000/api/v2/extensions/org.openflexure.focus-stack/acquire_and_fuse_stack`,
+            {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({
+                    settle: 0.6,
+                    start_offset: -300,
+                    step_size: 40,
+                    blur: 21,
+                    output_name: "fused.jpg",
+                    weights_alpha: 25,
+                    levels: 10,
+                    end_offset: 300,
+                }),
+            }
+        ).catch(err => {
+            console.error("Focus stack error", err);
+            showToast('Focus stack fehlgeschlagen.', 'error');
+        });
+    }, [API_IP, showToast]);
+
+    const handleButtonUp = (buttonId) => {
+        const buttonMap = {1: "button-a", 2: "button-d", 3: "button-b", 4: "button-c"};
+        const elementId = buttonMap[buttonId];
+        if (elementId) {
+            const buttonElement = document.getElementById(elementId);
+            if (buttonElement) {
+                buttonElement.setAttribute("fill", "white");
+                buttonElement.setAttribute("fill-opacity", "0.6");
+                buttonElement.removeAttribute("filter");
+            }
+        }
+    };
+
+    const handleButtonDown = useCallback((a) => {
+        if (lastButtonPressedRef.current === a.button) return;
+        lastButtonPressedRef.current = a.button;
+
+        const buttonMap = {1: "button-a", 2: "button-d", 3: "button-b", 4: "button-c"};
+        const elementId = buttonMap[a.button];
+        if (elementId) {
+            const buttonElement = document.getElementById(elementId);
+            if (buttonElement) {
+                buttonElement.setAttribute("fill", "white");
+                buttonElement.setAttribute("fill-opacity", "1");
+                buttonElement.setAttribute("filter", "url(#dropshadowbtns)");
+            }
+        }
+
+        if (a.button === 1) { // Button A
+            if (currentMenu.current === "main") captureImage();
+            else if (currentMenu.current === "autofocus") {
+                autoFocus3();
+                showToast('Starte Autofocus full', 'info');
+            }
+        } else if (a.button === 3) { // Button B
+            if (currentMenu.current === "main") {
+                setShowAutofocusMenu(true);
+                currentMenu.current = "autofocus";
+            } else if (currentMenu.current === "autofocus") {
+                setShowAutofocusMenu(false);
+                currentMenu.current = "main";
+            } else if (currentMenu.current === "gallery") {
+                if (currentIndex < imagesLength - 1) {
+                    setCurrentIndex(currentIndex + 1);
+                } else {
+                    showToast('Das ist das letzte Bild.', 'info');
+                }
+            }
+        } else if (a.button === 4) { // Button C
+            if (currentMenu.current === "main") {
+                setShowGallery(true);
+                setShowGalleryMenu(true);
+                currentMenu.current = "gallery";
+            } else if (currentMenu.current === "gallery") {
+                setShowGallery(false);
+                setShowGalleryMenu(false);
+                currentMenu.current = "main";
+            } else if (currentMenu.current === "autofocus") {
+                autoFocus1();
+                showToast('Starte Autofocus fine', 'info');
+            }
+        } else if (a.button === 2) { // Button D
+            if (currentMenu.current === "main") {
+                focusStack();
+            } else if (currentMenu.current === "gallery") {
+                if (currentIndex > 0) {
+                    setCurrentIndex(currentIndex - 1);
+                } else {
+                    showToast('Das ist das erste Bild.', 'info');
+                }
+            } else if (currentMenu.current === "autofocus") {
+                autoFocus2();
+                showToast('Starte Autofocus medium', 'info');
+            }
+        }
+
         setTimeout(() => {
-          handleButtonUp(a);
-          lastButtonPressedRef.current = null;
+            handleButtonUp(a.button);
+            lastButtonPressedRef.current = null;
         }, 100);
-      } else if (a.button === 2) {
-        /**Galerie */
-        const buttonD = document.getElementById("button-d");
-        if (buttonD) {
-          buttonD.setAttribute("fill", "white");
-          buttonD.setAttribute("fill-opacity", "1");
-          buttonD.setAttribute("filter", "url(#dropshadowbtns)");
+
+    }, [currentIndex, imagesLength, setCurrentIndex, setShowAutofocusMenu, setShowGallery, setShowGalleryMenu, showToast, captureImage, focusStack]);
+
+    const latestButtonDownHandler = useLatest(handleButtonDown);
+
+
+    const handleJoyStick = useCallback((x, y) => {
+        const joystickBase = document.getElementById("joystick-base");
+        const joystickHandle = document.getElementById("joystick-handle");
+        const rect = joystickBase.getBoundingClientRect();
+        const radius = rect.width / 2;
+
+        x = x * radius;
+        y = y * radius;
+
+        joystickHandle.style.left = `${x + radius}px`;
+        joystickHandle.style.top = `${-y + radius}px`;
+
+
+    }, [showToast]);
+    const latestJoyStickHandler = useLatest(handleJoyStick)
+
+    useEffect(() => {
+        const serverAddress = `ws://${API_IP}:6789`;
+        let ws;
+
+        const connectWebsocket = () => {
+            console.log("Attempting to connect to WebSocket server...");
+            ws = new WebSocket(serverAddress);
+            websocketRef.current = ws;
+
+            ws.onopen = () => console.log("Connection established.");
+
+            ws.onmessage = (event) => {
+                console.log("Message from server: ", event.data);
+                try {
+                    const data = JSON.parse(event.data);
+                    if (data.button) {
+                        latestButtonDownHandler.current(data);
+                    }
+                    if (data.joystick) {
+                        latestJoyStickHandler.current(data.joystick.x, data.joystick.y);
+                    }
+                } catch (error) {
+                    console.error("Error parsing message data", error);
+                }
+            };
+
+            ws.onerror = (error) => console.error(`WebSocket Error:`, error);
+
+            ws.onclose = () => {
+                console.error("Connection died. Reconnecting in 5 seconds...");
+                setTimeout(connectWebsocket, 5000);
+            };
+        };
+
+        connectWebsocket();
+
+        return () => {
+            if (toastTimerRef.current) {
+                clearTimeout(toastTimerRef.current);
+            }
+            if (websocketRef.current) {
+                websocketRef.current.onclose = null;
+                websocketRef.current.close();
+            }
         }
-        setShowAutofocusMenu(false);
-        setShowGallery((prev) => !prev); /*sets gallery visible/closes it*/
-        setShowGalleryMenu(
-          (prev) => !prev
-        ); /*sets gallery data visible/closes it*/
-        setTimeout(() => {
-          handleButtonUp(a);
-          lastButtonPressedRef.current = null;
-        }, 100);
-      }
-    };
+    }, [API_IP, latestButtonDownHandler]);
 
-    const handleButtonUp = (a) => {
-      /*param a: key input
-            set btn attributes when button is released (white, reduced opacity, remove dropshadow)*/
-      if (a.button === 1) {
-        const buttonA = document.getElementById("button-a");
-        if (buttonA) {
-          buttonA.setAttribute("fill", "white");
-          buttonA.setAttribute("fill-opacity", "0.6");
-          buttonA.removeAttribute("filter");
-        }
-      } else if (a.button === 3) {
-        const buttonB = document.getElementById("button-b");
-        if (buttonB) {
-          buttonB.setAttribute("fill", "white");
-          buttonB.setAttribute("fill-opacity", "0.6");
-          buttonB.removeAttribute("filter");
-        }
-      } else if (a.button === 4) {
-        const buttonC = document.getElementById("button-c");
-        if (buttonC) {
-          buttonC.setAttribute("fill", "white");
-          buttonC.setAttribute("fill-opacity", "0.6");
-          buttonC.removeAttribute("filter");
-        }
-      } else if (a.button === 2) {
-        const buttonD = document.getElementById("button-d");
-        if (buttonD) {
-          buttonD.setAttribute("fill", "white");
-          buttonD.setAttribute("fill-opacity", "0.6");
-          buttonD.removeAttribute("filter");
-        }
-      }
-    };
-
-    const connectWebsocket = () => {
-      console.log("Attempting to connect to WebSocket server...");
-      websocket = new WebSocket(serverAddress);
-
-      websocket.onopen = (event) => console.log("Connection established.");
-      websocket.onmessage = (event) => {
-        console.log("Message from server: ", event.data);
-        const data = JSON.parse(event.data);
-        if (data.button) {
-          handleButtonDown(data);
-          setTimeout(() => handleButtonUp(data), 100);
-        }
-      };
-
-      websocket.onerror = (error) =>
-        console.error(`WebSocket Error: ${error.message}`);
-      websocket.onclose = (event) => {
-        console.error("Connection died. Reconnecting in 5 seconds...");
-        setTimeout(connectWebsocket, 5000);
-      };
-    };
-
-    connectWebsocket();
-
-    return () => websocket && websocket.close();
-  }, [setShowGallery, setShowGalleryMenu, setShowAutofocusMenu]);
-
-  return <ControllerBtns />;
+    return (
+        <>
+            {toastInfo.show && <Toast message={toastInfo.message} type={toastInfo.type}/>}
+            <ControllerBtns/>
+        </>
+    );
 }
 
 export default ControllerBtnsInteraction;

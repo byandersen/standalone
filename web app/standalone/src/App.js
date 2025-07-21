@@ -11,6 +11,7 @@ import AutofocusMenu from "./components/AutofocusMenu";
 import ImageGallery from "./components/ImageGallery";
 import GalleryMenu from "./components/GalleryMenu";
 import ImageDisplay from "./components/Minimap";
+import {useEffect} from "react";
 import { API_IP } from "./config";
 
 function App() {
@@ -20,6 +21,20 @@ function App() {
   const [images, setImages] = useState([]); // Alle Bilder
   const [currentIndex, setCurrentIndex] = useState(0); // Aktueller Index
   const currentImage = images[currentIndex] || null;
+
+  const imageUrlBase = `http://${API_IP}:5000/api/v2/streams/mjpeg`;
+  const updateInterval = 10000;
+  const [imageUrl, setImageUrl] = useState(
+     `${imageUrlBase}?${new Date().getTime()}`
+  );
+
+  useEffect(() => {
+      const intervalId = setInterval(() => {
+        setImageUrl(`${imageUrlBase}?${new Date().getTime()}`);
+      }, updateInterval);
+
+      return () => clearInterval(intervalId);
+  }, [imageUrlBase, updateInterval]);
 
   return (
     <div className="body">
@@ -33,7 +48,7 @@ function App() {
             setCurrentIndex={setCurrentIndex}
           />
           <img
-            src={`http://${API_IP}:5000/api/v2/streams/mjpeg`}
+            src={imageUrl}
             alt="Live-Capture of a sample"
           />
           <div className="container-controller">
@@ -42,6 +57,9 @@ function App() {
                 setShowGallery={setShowGallery}
                 setShowGalleryMenu={setShowGalleryMenu}
                 setShowAutofocusMenu={setShowAutofocusMenu}
+                currentIndex={currentIndex}
+                setCurrentIndex={setCurrentIndex}
+                imagesLength={images.length}
               />
             </div>
             <div className="joystick">

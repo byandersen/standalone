@@ -1,7 +1,7 @@
 .gallery-menu {
   display: flex;
   flex-direction: column;
-  height: 90%;
+  /*height: 90%;*/
 }
 
 .gallery-menu h1 {
