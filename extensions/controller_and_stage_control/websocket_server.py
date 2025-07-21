@@ -25,7 +25,8 @@ class WebsocketServer:
 
         if "joystick" in parsed_message:
             self.stage_controller.change_direction(
-                (parsed_message["joystick"]["x"], parsed_message["joystick"]["y"])
+                (parsed_message["joystick"]["x"], parsed_message["joystick"]["y"]),
+                parsed_message["joystick"].get("button", False),
             )
 
         await self._send_to_clients(json.dumps(parsed_message))

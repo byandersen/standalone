@@ -17,7 +17,7 @@ map_button = {
     25: 2,
 }
 
-joystick_max = 2 ** 16 - 1
+joystick_max = 2**16 - 1
 
 
 def serial_listener(websocket_server: WebsocketServer):
@@ -30,7 +30,7 @@ def serial_listener(websocket_server: WebsocketServer):
     while True:
         try:
             logger.debug("Trying to connect to serial port")
-            ser = serial.Serial("COM4", 115200, timeout=5)
+            ser = serial.Serial("/dev/ttyUSB0", 115200, timeout=5)
             logger.info("Connected to serial port")
 
             while True:
@@ -50,11 +50,15 @@ def serial_listener(websocket_server: WebsocketServer):
                     x = round(1 - data["joystick"]["x"] * 2 / joystick_max, 3)
                     y = round(data["joystick"]["y"] * 2 / joystick_max - 1, 3)
 
-                    if math.sqrt((x ** 2 + y ** 2)) < 0.1:
+                    if math.sqrt((x**2 + y**2)) < 0.1:
                         x, y = 0.0, 0.0
 
                     processed_data = {
-                        "joystick": {"x": x, "y": y},
+                        "joystick": {
+                            "x": x,
+                            "y": y,
+                            "button": data["joystick"]["button"],
+                        },
                     }
                     websocket_server.handle_input(json.dumps(processed_data))
 

@@ -13,18 +13,29 @@ class StageController:
 
         self._active = threading.Event()
         self.current_direction = (0, 0)
+        self.focus_axis = False
 
     def start_control(self):
         factor = 70
+        focus_factor = 30
         with self.stage.lock:
             while self.current_direction != (0, 0):
-                self.stage.board.move_rel(
-                    (
-                        -int(self.current_direction[0] * factor),
-                        int(self.current_direction[1] * factor),
-                        0,
+                if self.focus_axis:
+                    self.stage.board.move_rel(
+                        (
+                            0,
+                            0,
+                            int(self.current_direction[1] * focus_factor),
+                        )
                     )
-                )
+                else:
+                    self.stage.board.move_rel(
+                        (
+                            -int(self.current_direction[0] * factor),
+                            int(self.current_direction[1] * factor),
+                            0,
+                        )
+                    )
 
     def run(self):
         while True:
@@ -32,7 +43,8 @@ class StageController:
             if self.current_direction != (0, 0):
                 self.start_control()
 
-    def change_direction(self, direction):
+    def change_direction(self, direction, axis=False):
+        self.focus_axis = axis
         self.current_direction = direction
         if direction == (0, 0):
             self._active.clear()
