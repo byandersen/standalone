@@ -57,5 +57,5 @@ class StageController:
 
         if self.thread is not None:
             logger.debug("Already running")
-        self.thread = threading.Thread(target=self.run)
+        self.thread = threading.Thread(target=self.run, name="Stage Controller")
         self.thread.start()

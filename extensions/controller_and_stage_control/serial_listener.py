@@ -3,7 +3,6 @@ import math
 import time
 
 import serial
-import setproctitle
 
 from .websocket_server import WebsocketServer
 from .logger import logger as base_logger
@@ -21,8 +20,6 @@ joystick_max = 2**16 - 1
 
 
 def serial_listener(websocket_server: WebsocketServer):
-    setproctitle.setproctitle("CSC_Serial_Listener")
-
     logger.info("Starting serial listener")
 
     ser = None

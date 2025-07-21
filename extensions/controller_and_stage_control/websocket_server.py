@@ -2,7 +2,6 @@ import asyncio
 import json
 import threading
 
-import setproctitle
 import websockets
 
 from .logger import logger as base_logger
@@ -64,12 +63,11 @@ class WebsocketServer:
 
     def run_server(self):
         logger.debug("Running websocket server thread")
-        setproctitle.setproctitle("CSC_Websocket_Server")
         asyncio.run(self._start_websocket_server())
 
     def run(self):
         if self.thread:
             logger.warning("Websocket server already running")
             return
-        self.thread = threading.Thread(target=self.run_server)
+        self.thread = threading.Thread(target=self.run_server, name="CSC_Websocket_Server")
         self.thread.start()
