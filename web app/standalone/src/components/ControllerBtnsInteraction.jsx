@@ -3,17 +3,12 @@ import ControllerBtns from "./ControllerBtns";
 import { API_IP } from "../config";
 /* This component sets the attributes for each individual button.*/
 
-/* Buttons neubelegen, wenn z.B. smartAutofocus gewählt wurde. Auf Hauptbuttons alle Funktionen 
-setzen, Menü rausnehmen*/
-
-/**Komponente mit 3 oder 4 Modi für Buttons mit Beschriftung
- *  Standard (Home), Autofocus, FocusStack */
-
 function ControllerBtnsInteraction({
   setShowGallery,
   setShowGalleryMenu,
   setShowAutofocusMenu,
 }) {
+
   const lastButtonPressedRef = useRef(null);
   useEffect(() => {
     const serverAddress = `ws://${API_IP}:6789`;

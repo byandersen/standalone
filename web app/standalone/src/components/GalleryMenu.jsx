@@ -44,23 +44,6 @@ function GalleryMenu({
         <p><strong>Filename: </strong> {currentImage.time}</p> 
         <p><strong>ID: </strong> {currentImage.id}</p>
       </div>
-
-      <div className="gallery-menu-btn">
-        <button
-          className="last-img-btn"
-          onClick={handlePrev}
-          disabled={currentIndex === 0} /*disables btn if index = 0*/
-        >
-          Prev
-        </button>
-        <button
-          className="next-img-btn"
-          onClick={handleNext}
-          disabled={currentIndex === imagesLength - 1} /*disables btn if last img is shown*/
-        >
-          Next
-        </button>
-      </div>
     </div>
   );
 }

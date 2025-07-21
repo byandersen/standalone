@@ -1,13 +1,7 @@
 .gallery-menu {
   display: flex;
   flex-direction: column;
-  height: 100%;
-}
-
-.gallery-menu-btn {
-  margin-top: 300px;
-  display: flex;
-  gap: 10px;
+  height: 90%;
 }
 
 .gallery-menu h1 {
@@ -20,31 +14,4 @@
   justify-self: left;
   margin: 5px;
   margin-left: 0;
-}
-
-.last-img-btn, .next-img-btn {
-  background-color: var(--lilac);
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  font-family: "Inter", sans-serif;
-  border-radius: 8px;
-  font-size: 16px;
-  text-align: left;
-  cursor: pointer;
-  transition: background-color 0.2s, box-shadow 0.2s;
-}
-
-.last-img-btn:active, .next-img-btn:active {
-  background-color: var(--lilacHover);
-  box-shadow: 0 0 10px rgba(136, 68, 219, 0.5);
-}
-
-.last-img-btn:disabled,
-.next-img-btn:disabled {
-  background-color: #ccc; /* hellgrau */
-  color: #666; /* dunkleres Grau für Text */
-  cursor: not-allowed;
-  box-shadow: none;
-  opacity: 0.7;
 }

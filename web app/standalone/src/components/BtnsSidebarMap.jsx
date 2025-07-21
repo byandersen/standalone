@@ -8,13 +8,13 @@ function BtnsSidebarMap({ showGalleryMenu, showAutofocusMenu }) {
             <strong>A</strong> – Capture
           </div>
           <div>
-            <strong>B</strong> – Autofokus
+            <strong>B</strong> – Autofocus
           </div>
           <div>
             <strong>C</strong> – Focus Stack
           </div>
           <div>
-            <strong>D</strong> – Galerie
+            <strong>D</strong> – Gallery
           </div>
         </>
       );
