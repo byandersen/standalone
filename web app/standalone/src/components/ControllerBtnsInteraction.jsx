@@ -392,6 +392,7 @@ function ControllerBtnsInteraction({
 
   const latestButtonDownHandler = useLatest(handleButtonDown);
 
+  // Handling of joystick handle positioning
   const handleJoyStick = useCallback(
     (x, y) => {
       const joystickBase = document.getElementById("joystick-base");
@@ -409,6 +410,7 @@ function ControllerBtnsInteraction({
   );
   const latestJoyStickHandler = useLatest(handleJoyStick);
 
+  // Websocket connection and reconnection on errors
   useEffect(() => {
     const serverAddress = `ws://${API_IP}:6789`;
     let ws;

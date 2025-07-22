@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 
 /**
  * 
- * @param {} imageUrlBase -
- * @param {} imageUrlBase -
+ * @param {str} imageUrlBase - Image Url
+ * @param {number} updateInterval - Update interval for minimap
  * @param {boolean} showAutofocusMenu -
  * @param {boolean} showGalleryMenu -
  * @returns 

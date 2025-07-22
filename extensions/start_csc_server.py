@@ -4,6 +4,8 @@ from labthings import LabThing
 from extensions.controller_and_stage_control import LABTHINGS_EXTENSIONS
 from extensions.mini_map import LABTHINGS_EXTENSIONS as MINIMAP_EXTENSIONS
 
+"""Debugging Server"""
+
 app = Flask(__name__)
 labthing = LabThing(app)
 
