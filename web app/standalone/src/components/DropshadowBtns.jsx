@@ -1,5 +1,7 @@
-/* This component is the drop-shadow filter for the ControllerBtnsInteraction and ControllerBtns component, which is
-being activated by pressing a button.*/ 
+/** This component creates a drop-shadow filter for the ControllerBtnsInteraction and ControllerBtns component, which gets
+ *  activated when pressing a button.
+ * @returns {JSX.Element} -This React Element creates a filter which is used in the "ControllerBtnsInteraction" component to set a dropshadow filter
+ */
 
 function DropshadowBtns() {
   return (

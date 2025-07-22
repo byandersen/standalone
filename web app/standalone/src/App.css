@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap);
+@import url(https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap); /*Font: Inter*/
 
 :root {
   --lilac: #8844db;
@@ -8,6 +8,7 @@
   --btns: 100%;
 }
 
+/* === General Layout === */
 body {
   font-family: "Inter", sans-serif;
   font-optical-sizing: auto;
@@ -28,6 +29,7 @@ body {
   grid-template-columns: repeat(8, 1fr);
 }
 
+/* === Microscope view and Image === */
 .microscope-view {
   grid-row: 1 / 9;
   grid-column: 1 / 7;
@@ -49,6 +51,7 @@ body {
   object-fit: cover;
 }
 
+/* === Controller Elements, buttons & joystick === */
 .container-controller {
   position: absolute;
   bottom: 0;
@@ -78,6 +81,7 @@ body {
   z-index: 3;
 }
 
+/* === Joystick === */
 #joystick-base {
   position: relative;
   width: 60px;
@@ -108,6 +112,7 @@ body {
   cursor: grabbing;
 }
 
+/* === Sidebar === */
 .sidebar {
   grid-row: 1 / 8;
   grid-column: 7 / 9;
@@ -125,6 +130,7 @@ body {
   margin: 0;
 }
 
+/* === Button Labels === */
 .btns-map-list {
   display: flex;
   flex-direction: column;

@@ -1,3 +1,8 @@
+/**
+ * This component displays the Joystick.
+ * @returns {JSX.Element} - React Element that renders the joystick
+ */
+
 function ControllerJoystick() {
   return (
     <div id="interactive-joystick">
