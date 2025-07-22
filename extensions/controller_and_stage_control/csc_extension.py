@@ -13,6 +13,8 @@ logger = base_logger.getChild(__name__)
 
 
 class CSCExtension(BaseExtension):
+    """Registers as extension to start communication threads and stage control"""
+
     def __init__(self):
         super().__init__(
             "de.hs-flensburg.controller-and-stage-control", version="0.0.0"

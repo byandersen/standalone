@@ -20,6 +20,8 @@ joystick_max = 2**16 - 1
 
 
 def serial_listener(websocket_server: WebsocketServer):
+    """Thread for connecting and listening on serial port. The received json will also be pre-processed to have
+    normalized joystick values and button enumeration."""
     logger.info("Starting serial listener")
 
     ser = None
@@ -44,6 +46,7 @@ def serial_listener(websocket_server: WebsocketServer):
                     websocket_server.handle_input(json.dumps(processed_data))
 
                 elif "joystick" in data:
+                    # Normalisation
                     x = round(1 - data["joystick"]["x"] * 2 / joystick_max, 3)
                     y = round(data["joystick"]["y"] * 2 / joystick_max - 1, 3)
 
@@ -66,4 +69,5 @@ def serial_listener(websocket_server: WebsocketServer):
         finally:
             if ser:
                 ser.close()
+            # Reconnect timer
             time.sleep(3)
