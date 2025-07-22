@@ -35,21 +35,17 @@ class MiniMapView(View):
 class TestView(View):
 
     def get(self):
-        microscope = find_component('org.openflexure.microscope')
+        microscope = find_component("org.openflexure.microscope")
         output = microscope.captures.new_image(
             temporary=False,
         )
 
-        img = cv2.imread('/var/openflexure/extensions/microscope_extensions/mini_map/placeholder.png')
+        img = cv2.imread(
+            "/var/openflexure/extensions/microscope_extensions/mini_map/placeholder.png"
+        )
 
-        byte_like_image = cv2.imencode('.jpg', img)[1].tobytes()
+        byte_like_image = cv2.imencode(".jpg", img)[1].tobytes()
         output.write(byte_like_image)
         output.flush()
 
         output.put_and_save()
-
-
-
-
-
-

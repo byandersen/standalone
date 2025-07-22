@@ -44,12 +44,14 @@ class LiveStitching:
             self.img = img
             self.size = img.shape[:2]
             self.corner = (0, 0)
-            self.features.append(Feature(current_features, self.corner, self.size, coords))
+            self.features.append(
+                Feature(current_features, self.corner, self.size, coords)
+            )
             return img
 
         nearby_features = self.get_nearby_features(coords)
         if len(nearby_features) == 0:
-            print('could not find a good feature')
+            print("could not find a good feature")
             return
 
         nearby_image_features = [x.features for x in nearby_features]
@@ -70,8 +72,12 @@ class LiveStitching:
         second_r_relativ_to_new = cameras[1].R
 
         new_corner = (
-            round(-(cameras[0].R[0][2]) + second_corner[0] + second_r_relativ_to_new[0][2]),
-            round(-(cameras[0].R[1][2]) + second_corner[1] + second_r_relativ_to_new[1][2]),
+            round(
+                -(cameras[0].R[0][2]) + second_corner[0] + second_r_relativ_to_new[0][2]
+            ),
+            round(
+                -(cameras[0].R[1][2]) + second_corner[1] + second_r_relativ_to_new[1][2]
+            ),
         )
 
         corners = [self.corner, new_corner]
@@ -93,6 +99,8 @@ class LiveStitching:
             min(corners[0][0], corners[1][0]),
             min(corners[0][1], corners[1][1]),
         )
-        self.features.append(Feature(current_features, new_corner, img.shape[:2], coords))
+        self.features.append(
+            Feature(current_features, new_corner, img.shape[:2], coords)
+        )
 
         return self.img

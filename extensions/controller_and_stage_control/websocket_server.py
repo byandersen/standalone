@@ -69,5 +69,7 @@ class WebsocketServer:
         if self.thread:
             logger.warning("Websocket server already running")
             return
-        self.thread = threading.Thread(target=self.run_server, name="CSC_Websocket_Server")
+        self.thread = threading.Thread(
+            target=self.run_server, name="CSC_Websocket_Server"
+        )
         self.thread.start()

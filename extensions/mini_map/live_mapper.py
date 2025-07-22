@@ -5,7 +5,6 @@ import threading
 import time
 
 import cv2
-import numpy as np
 
 from .stitcher import LiveStitching
 
@@ -19,23 +18,27 @@ class LiveMapper:
 
     @staticmethod
     def get_distance(pos1, pos2):
-        return math.sqrt((pos2[0] - pos1[0])**2 + (pos2[1] - pos1[1])**2)
+        return math.sqrt((pos2[0] - pos1[0]) ** 2 + (pos2[1] - pos1[1]) ** 2)
 
     def worker(self):
         while True:
             img, pos = self.queue.get()
 
             try:
-                logging.error("Try stitching")
-                #
-                new_img = self.stitcher.add_image(img, pos[:2])
-                cv2.imwrite('/var/openflexure/extensions/microscope_extensions/mini_map/placeholder.png', new_img)
+                logging.debug("Try stitching image")
+
+                new_img = self.stitcher.add_image(
+                    cv2.cvtColor(img, cv2.COLOR_RGB2BGR), pos[:2]
+                )
+                cv2.imwrite(
+                    "/var/openflexure/extensions/microscope_extensions/mini_map/placeholder.png",
+                    new_img,
+                )
 
             except Exception as e:
                 logging.exception("Failed to add image")
 
             self.queue.task_done()
-
 
     def loop(self):
         self.stitcher = LiveStitching()
@@ -46,17 +49,15 @@ class LiveMapper:
         while True:
             pos = self.microscope.stage.position
 
-            if last_pos is None or LiveMapper.get_distance(pos, last_pos) > LiveMapper.DISTANCE:
+            if (
+                last_pos is None
+                or LiveMapper.get_distance(pos, last_pos) > LiveMapper.DISTANCE
+            ):
                 last_pos = pos
                 img = self.microscope.camera.array(use_video_port=True)
 
                 self.queue.put((img, pos))
-                logging.error("Put Image in Queue")
 
-                # np.save('/var/openflexure/extensions/microscope_extensions/mini_map/img', img)
-
-
-            logging.error(f"New position: {pos}, {last_pos}, {LiveMapper.get_distance(pos, last_pos)}")
             time.sleep(0.2)
 
     def start_thread(self):

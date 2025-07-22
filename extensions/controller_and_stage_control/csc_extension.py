@@ -33,7 +33,9 @@ class CSCExtension(BaseExtension):
         logger.info(f"Started websocket server")
 
         self.serial_listener = threading.Thread(
-            target=serial_listener, args=(self.websocket_server,), name="CSC_Serial_Listener",
+            target=serial_listener,
+            args=(self.websocket_server,),
+            name="CSC_Serial_Listener",
         )
         self.serial_listener.start()
         logger.info(f"Started serial listener")
