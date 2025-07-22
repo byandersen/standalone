@@ -11,8 +11,9 @@ logger = base_logger.getChild(__name__)
 
 
 class WebsocketServer:
+    """Handling websocket connections to receive and send user input form controller to all connected clients"""
+
     def __init__(self, stage_controller: StageController):
-        print(logger)
         logger.debug("Websocket Server Initialization")
         self.connected_clients = set()
         self.asyncio_loop = None

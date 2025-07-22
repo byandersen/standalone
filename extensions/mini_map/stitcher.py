@@ -1,5 +1,4 @@
 import dataclasses
-import logging
 
 import cv2
 import cv2.detail
@@ -17,6 +16,9 @@ class Feature:
 
 class LiveStitching:
     def __init__(self):
+        """Handles live stitching by continues adding images, comparing with existing features and blending into the
+        bigger picture. It utilizes the opencv suite for feature detection, camera estimation and bundling as well
+        as blending."""
         self._detector = cv2.SIFT.create()
         self._matcher = cv2.detail.BestOf2NearestMatcher()
         self._camera_estimator = cv2.detail.AffineBasedEstimator()
@@ -38,9 +40,10 @@ class LiveStitching:
         return [self.features[i] for i in indices]
 
     def add_image(self, img, coords):
+        """Try adding image to mini map and returning the new blended image."""
         current_features = cv2.detail.computeImageFeatures2(self._detector, img)
 
-        if self.img is None:
+        if self.img is None:  # When its the first image
             self.img = img
             self.size = img.shape[:2]
             self.corner = (0, 0)
@@ -49,7 +52,9 @@ class LiveStitching:
             )
             return img
 
-        nearby_features = self.get_nearby_features(coords)
+        nearby_features = self.get_nearby_features(
+            coords
+        )  # Find existing nearby image features by coordinates (n=3)
         if len(nearby_features) == 0:
             print("could not find a good feature")
             return
@@ -58,16 +63,19 @@ class LiveStitching:
 
         features = [current_features, *nearby_image_features]
 
+        # Pairwise matches existing features with new image features
         pairwise_matches = self._matcher.apply2(features)
         self._matcher.collectGarbage()
 
+        # Estimates camera matrices
         b, cameras = self._camera_estimator.apply(features, pairwise_matches, None)
         for cam in cameras:
             cam.R = cam.R.astype(np.float32)
 
+        # Run bundle adjustment to minimize general error
         b, cameras = self._camera_adjuster.apply(features, pairwise_matches, cameras)
 
-        # get new images corner
+        # Calculate top left corner position using own and first cameras extrinsic
         second_corner = nearby_features[0].corner
         second_r_relativ_to_new = cameras[1].R
 
@@ -83,6 +91,7 @@ class LiveStitching:
         corners = [self.corner, new_corner]
         sizes = [self.size, img.shape[:2]]
 
+        # Blend using no blender to reduce cpu usage
         blender = cv2.detail.Blender.createDefault(cv2.detail.Blender_NO)
         blender.prepare(corners, [(size[1], size[0]) for size in sizes])
 
@@ -93,6 +102,8 @@ class LiveStitching:
         result = None
         result_mask = None
         result, result_mask = blender.blend(result, result_mask)
+
+        # Save new composed image and add features
         self.img = cv2.convertScaleAbs(result)
         self.size = self.img.shape[:2]
         self.corner = (
