@@ -12,10 +12,10 @@ function GalleryMenu({ showGalleryMenu, currentImage }) {
 
   return (
     <div className="gallery-menu">
-      <h1>Image Data</h1>
+      <h1>Bild-Daten</h1>
       <div className="gallery-data">
         <p>
-          <strong>Filename: </strong> {currentImage.time}
+          <strong>Bildname: </strong> {currentImage.time}
         </p>
         <p>
           <strong>ID: </strong> {currentImage.id}
