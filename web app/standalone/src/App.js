@@ -107,7 +107,7 @@ function App() {
           <div className="minimap">
             <ImageDisplay
               imageUrlBase={`http://${API_IP}:5000/api/v2/extensions/de.hs-flensburg.mini-map/map`}
-              updateInterval={10000}
+              updateInterval={3000}
               showGalleryMenu={showGalleryMenu}
               showAutofocusMenu={showAutofocusMenu}
             />
