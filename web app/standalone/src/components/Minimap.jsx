@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from "react";
 
+/**
+ * 
+ * @param {} imageUrlBase -
+ * @param {} imageUrlBase -
+ * @param {boolean} showAutofocusMenu -
+ * @param {boolean} showGalleryMenu -
+ * @returns 
+ */
+
 function ImageDisplay({
   imageUrlBase,
   updateInterval,
@@ -21,7 +30,7 @@ function ImageDisplay({
     } else {
       console.log("minimap deactivated");
     }
-  }, [imageUrlBase, updateInterval, showAutofocusMenu, showGalleryMenu]); //useEffect runs again when value has been changed
+  }, [imageUrlBase, updateInterval, showAutofocusMenu, showGalleryMenu]); /**useEffect runs again when value has been changed*/
 
   return (
     <img
@@ -29,7 +38,7 @@ function ImageDisplay({
       alt="Mini Map"
       style={{
         maxWidth: "100%",
-        display: showAutofocusMenu || showGalleryMenu ? "none" : "block", //only shows minimap if menus aren't open
+        display: showAutofocusMenu || showGalleryMenu ? "none" : "block", /**only shows minimap if menus aren't open*/
       }}
     />
   );

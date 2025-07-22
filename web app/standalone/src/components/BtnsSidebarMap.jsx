@@ -1,6 +1,15 @@
+/**
+ * This component handles each individual state of the Button Labels in the sidebar.
+ * The contents change depending on the currently shown menu.
+ *
+ * @param {boolean} showGalleryMenu - Current state of Gallery Sidebar Menu
+ * @param {boolean} showAutofocusMenu - Current State of Autofocus Menu
+ * @returns {JSX.Element} - Dynamically renders information for each button depending on which menu is currently active
+ */
+
 function BtnsSidebarMap({ showGalleryMenu, showAutofocusMenu }) {
-  
-    const handleMainLabelMap = () => {
+  const handleMainLabelMap = () => {
+    //only renders if neither are currently active
     if (!showGalleryMenu && !showAutofocusMenu) {
       return (
         <>
@@ -14,7 +23,7 @@ function BtnsSidebarMap({ showGalleryMenu, showAutofocusMenu }) {
             <strong>C</strong> – Focus Stack
           </div>
           <div>
-            <strong>D</strong> – Gallery
+            <strong>D</strong> – Galerie
           </div>
         </>
       );
@@ -22,11 +31,12 @@ function BtnsSidebarMap({ showGalleryMenu, showAutofocusMenu }) {
   };
 
   const handleGalleryLabelMap = () => {
+    //only renders if Gallery Menu is active
     if (showGalleryMenu) {
       return (
         <>
           <div>
-            <strong>A</strong> – 
+            <strong>A</strong> –
           </div>
           <div>
             <strong>B</strong> – Nächstes
@@ -43,8 +53,9 @@ function BtnsSidebarMap({ showGalleryMenu, showAutofocusMenu }) {
   };
 
   const handleFocusStackLabelMap = () => {
+    //only renders if Autofocus Menu is active
     if (showAutofocusMenu) {
-         return (
+      return (
         <>
           <div>
             <strong>A</strong> – Voll
@@ -61,7 +72,7 @@ function BtnsSidebarMap({ showGalleryMenu, showAutofocusMenu }) {
         </>
       );
     }
-  }
+  };
   return (
     <div className="btns-sidebar-map-wrapper">
       <div className="btns-map-list">
