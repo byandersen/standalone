@@ -5,7 +5,7 @@ In diesem Ordner befinden sich alle Konstruktions- und Druckdaten für das Gehä
 
 ## Dateien
 
--- **controller_completely.f3d**  
+- **controller_completely.f3d**  
   Vollständiges 3D-Modell des Controllers im Fusion 360-Format. Diese Datei enthält alle Komponenten und kann zur Weiterbearbeitung oder Anpassung in Fusion 360 geöffnet werden.  
   **Hinweis:** Fusion 360 verwendet ein integriertes Versionsverwaltungssystem. Deshalb sind keine zusätzlichen Zwischenspeicherungen oder Modellstände innerhalb der Datei sichtbar. Das Fehlen expliziter Zwischenschritte ist kein Versäumnis, sondern ergibt sich aus der Art, wie Fusion 360 Projekte strukturiert und speichert. Der Bearbeitungsverlauf kann direkt innerhalb der Fusion-Umgebung nachvollzogen werden.
 
