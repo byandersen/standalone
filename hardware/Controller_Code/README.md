@@ -1,6 +1,6 @@
 # ESP32 Eingabegerät für Mikroskopsteuerung
 
-Dieses Projekt implementiert die Steuerung eines Mikroskops über ein selbst entwickeltes Eingabegerät mit einem ESP32 (FireBeetle ESP32-E). Es handelt sich um ein praktisches Embedded-System, das über vier Taster, einen Joystick und haptisches Feedback durch einen Vibrationsmotor verfügt. Die Daten werden über USB als JSON ausgegeben und können z. B. von einer Mikroskop-Steuerungssoftware ausgewertet werden.
+Dieses Projekt implementiert die Steuerung eines Mikroskops über ein selbst entwickeltes Eingabegerät mit einem ESP32 (FireBeetle ESP32-E). Es handelt sich um ein praktisches Embedded-System, das über vier Taster, einen Joystick und haptisches Feedback durch einen Vibrationsmotor verfügt. Die Daten werden über USB als JSON ausgegeben und können von einer Mikroskop-Steuerungssoftware ausgewertet werden.
 
 ## Funktionen
 
@@ -15,10 +15,10 @@ Dieses Projekt implementiert die Steuerung eines Mikroskops über ein selbst ent
 ## Hardwarevoraussetzungen
 
 - **FireBeetle ESP32-E**
-- **4 Taster** (digital, mit Pull-up)
-- **Joystick** mit I²C-Anbindung (z. B. Qwiic kompatibel)
+- **4 Taster** 
+- **Joystick** mit I²C-Anbindung 
 - **Vibrationsmotor (5 V)**
-- **Display mit HDMI-Anschluss** (optional, bei eigenem Gehäusedesign vorgesehen)
+- **Display mit HDMI-Anschluss** 
 
 ## Pinbelegung
 
